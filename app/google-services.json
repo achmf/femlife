@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "759109994608",
+    "project_id": "femlife-7a244",
+    "storage_bucket": "femlife-7a244.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:759109994608:android:3a7717d27b72b5c4250cb5",
+        "android_client_info": {
+          "package_name": "com.example.femlife"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "759109994608-72amjoaso05d39o07fr2dbf9v9ioldlr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.femlife",
+            "certificate_hash": "70169addba7cba8616d2727847388a058832ea42"
+          }
+        },
+        {
+          "client_id": "759109994608-to2ummlkfbjiusmefcqdcrfmsoevd4bb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVe95dByTeA4rpmcSUu8kYbqEda9aKtvU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "759109994608-to2ummlkfbjiusmefcqdcrfmsoevd4bb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
