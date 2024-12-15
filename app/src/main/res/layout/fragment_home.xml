@@ -1,6 +1,7 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
@@ -9,13 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:backgroundTint="@color/secondary" >
+        android:backgroundTint="@color/secondary"
+        android:gravity="center_horizontal">
 
         <!-- Header -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:background="@drawable/bg_header">
+            android:background="@drawable/headerbg">
 
             <!-- Welcome Message -->
             <TextView
@@ -25,10 +27,20 @@
                 android:layout_marginStart="16dp"
                 android:layout_centerVertical="true"
                 android:layout_alignParentStart="true"
-                android:text="Halo "
+                android:text="Halo, \nJohn Doe"
                 android:textSize="34sp"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
         </RelativeLayout>
+
+        <!-- RecyclerView for Grid Menu -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:clipToPadding="false"
+            android:overScrollMode="never" />
     </LinearLayout>
 </ScrollView>

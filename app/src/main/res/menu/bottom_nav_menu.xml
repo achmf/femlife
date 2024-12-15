@@ -9,10 +9,6 @@
         android:icon="@drawable/ic_message"
         android:title="Messages" />
     <item
-        android:id="@+id/nav_shop"
-        android:icon="@drawable/ic_shop"
-        android:title="Shop" />
-    <item
         android:id="@+id/nav_heart"
         android:icon="@drawable/ic_heart"
         android:title="Heart" />
