@@ -45,15 +45,19 @@ dependencies {
     implementation(platform(libs.firebase.bom))
 
     // Firebase Auth
-    implementation(libs.firebase.auth.v2200)
+    implementation(libs.firebase.auth)
     implementation(libs.play.services.auth)
 
+    // Firebase Firestore
+    implementation(libs.firebase.firestore)
+
+    implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.firebase.auth)
+    implementation(libs.androidx.runtime.saved.instance.state)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

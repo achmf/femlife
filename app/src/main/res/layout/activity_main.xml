@@ -63,7 +63,7 @@
         app:menu="@menu/bottom_nav_menu"
         app:itemIconSize="32dp"
         app:labelVisibilityMode="unlabeled"
-        app:itemIconTint="@color/accent"
+        app:itemIconTint="@color/secondaryAccent"
         app:backgroundTint="@color/secondary" />
 
 </RelativeLayout>
