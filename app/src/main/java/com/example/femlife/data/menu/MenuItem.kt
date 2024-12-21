@@ -1,4 +1,4 @@
-package com.example.femlife.data
+package com.example.femlife.data.menu
 
 data class MenuItem(
     val iconResId: Int, // ID Resource Icon

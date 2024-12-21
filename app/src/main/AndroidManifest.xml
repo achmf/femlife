@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="RECEIVE_BOOT_COMPLETED" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,7 +15,40 @@
         android:theme="@style/Theme.Femlife"
         tools:targetApi="31">
         <activity
-            android:name=".ui.activities.ProfileSetupActivity"
+            android:name=".ui.activities.product.manager.edit.EditProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.product.manager.add.AddProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.product.manager.ProductManagerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.product.ProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.alarm.popup.AlarmPopupActivity"
+            android:exported="false" />
+
+        <receiver android:name=".ui.activities.alarm.receiver.AlarmReceiver" />
+
+        <activity
+            android:name=".ui.activities.alarm.AlarmActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.alarm.create.CreateAlarmActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.article.create.CreateArticleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.article.detail.DetailArticleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.article.ArticleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.overview.ProfileSetupActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activities.profile.ProfileActivity"
@@ -26,10 +61,10 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

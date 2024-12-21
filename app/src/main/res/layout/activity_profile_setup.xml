@@ -30,86 +30,79 @@
         android:textColor="@color/white"
         android:layout_marginBottom="24dp" />
 
-
     <!-- Nama -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layout_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nama"
-        android:layout_marginBottom="16dp">
+        android:hint="Nama Lengkap">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/secondary"
-            android:inputType="textPersonName" />
+            android:background="@color/white"
+            android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Tanggal Lahir -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layout_date_of_birth"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Tanggal Lahir"
-        android:layout_marginBottom="16dp">
+        android:layout_marginTop="16dp"
+        android:hint="Tanggal Lahir">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_date_of_birth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             android:focusable="false"
-            android:background="@color/secondary"
             android:inputType="date" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Tanggal Lahir -->
+    <!-- Lokasi -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layout_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Lokasi"
-        android:layout_marginBottom="16dp">
+        android:layout_marginTop="16dp"
+        android:hint="Lokasi">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/secondary"
+            android:background="@color/white"
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Nomor Telepon -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layout_phone_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nomor Telepon"
-        android:layout_marginBottom="16dp">
+        android:background="@color/white"
+        android:layout_marginTop="16dp"
+        android:hint="Nomor Telepon">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_phone_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/secondary"
             android:inputType="phone" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Umur -->
+    <!-- Usia -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layout_age"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Umur"
-        android:layout_marginBottom="16dp">
+        android:layout_marginTop="16dp"
+        android:hint="Usia">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_age"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             android:focusable="false"
-            android:background="@color/secondary"
             android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
 
