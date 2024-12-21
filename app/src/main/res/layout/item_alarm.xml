@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Tanggal & Waktu -->
+        <TextView
+            android:id="@+id/tv_alarm_date_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tanggal &amp; Waktu"
+            android:textStyle="bold"
+            android:textSize="16sp" />
+
+        <!-- Nama Dokter -->
+        <TextView
+            android:id="@+id/tv_alarm_doctor_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dokter: Nama Dokter"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp" />
+
+        <!-- Lokasi -->
+        <TextView
+            android:id="@+id/tv_alarm_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lokasi: Lokasi Kontrol"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp" />
+
+        <!-- Catatan -->
+        <TextView
+            android:id="@+id/tv_alarm_notes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Catatan: Catatan Kontrol"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp" />
+
+        <!-- Edit & Delete Icons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:layout_marginTop="8dp">
+
+            <!-- Icon Edit -->
+            <ImageView
+                android:id="@+id/iv_edit_alarm"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_edit"
+                android:contentDescription="Edit Alarm"
+                android:layout_marginEnd="8dp" />
+
+            <!-- Icon Delete -->
+            <ImageView
+                android:id="@+id/iv_delete_alarm"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_delete"
+                android:contentDescription="Delete Alarm" />
+
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

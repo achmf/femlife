@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import com.example.femlife.R
 import com.example.femlife.databinding.ActivityMainBinding
 import com.example.femlife.ui.activities.auth.LoginActivity
+import com.example.femlife.ui.activities.overview.ProfileSetupActivity
 import com.example.femlife.ui.activities.profile.ProfileActivity
 import com.example.femlife.ui.fragments.home.HomeFragment
 import com.google.firebase.auth.FirebaseAuth

@@ -1,4 +1,4 @@
-package com.example.femlife.ui.activities
+package com.example.femlife.ui.activities.overview
 
 import android.app.DatePickerDialog
 import android.content.Intent
@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.femlife.databinding.ActivityProfileSetupBinding
+import com.example.femlife.ui.activities.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*

@@ -7,11 +7,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.femlife.R
-import com.example.femlife.data.MenuItem
+import com.example.femlife.data.menu.MenuItem
 
 class HomeMenuAdapter(
-    private val menuItems: List<MenuItem>, // Data item menu
-    private val onItemClick: (MenuItem) -> Unit // Callback untuk klik item
+    private var menuItems: List<MenuItem>,
+    private val onItemClick: (MenuItem) -> Unit
 ) : RecyclerView.Adapter<HomeMenuAdapter.MenuViewHolder>() {
 
     inner class MenuViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -29,11 +29,15 @@ class HomeMenuAdapter(
         holder.imageIcon.setImageResource(menuItem.iconResId)
         holder.textTitle.text = menuItem.title
 
-        // Klik item menu
         holder.itemView.setOnClickListener {
             onItemClick(menuItem)
         }
     }
 
     override fun getItemCount(): Int = menuItems.size
+
+    fun updateMenuItems(newMenuItems: List<MenuItem>) {
+        menuItems = newMenuItems
+        notifyDataSetChanged()
+    }
 }
