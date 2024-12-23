@@ -72,6 +72,9 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler) // Tambahkan ini untuk Room Compiler
 
+    // Tab Layout ViewPager
+    implementation(libs.androidx.viewpager2)
+
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

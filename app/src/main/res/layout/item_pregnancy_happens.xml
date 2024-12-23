@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingVertical="8dp" >
+
+    <!-- Dash Symbol -->
+    <TextView
+        android:id="@+id/tvListSymbol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="•"
+        android:textSize="16sp"
+        android:textColor="@color/black" />
+
+    <!-- Text Content -->
+    <TextView
+        android:id="@+id/tvWhatHappensItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Default Item"
+        android:textColor="@color/black"
+        android:textSize="14sp" />
+</LinearLayout>

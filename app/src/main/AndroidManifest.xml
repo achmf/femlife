@@ -15,6 +15,15 @@
         android:theme="@style/Theme.Femlife"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activities.menstrual.MenstrualTrackerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.postpregnancy.PostPregnancyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.pregnancy.PregnancyActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.product.manager.edit.EditProductActivity"
             android:exported="false" />
         <activity
