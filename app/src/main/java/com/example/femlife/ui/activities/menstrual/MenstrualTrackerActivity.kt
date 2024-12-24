@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.femlife.R
 import com.example.femlife.data.menstrual.SymptomType
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.slider.Slider
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -26,6 +27,7 @@ class MenstrualTrackerActivity : AppCompatActivity() {
     private lateinit var tvAverageCycleLength: TextView
     private lateinit var btnLogPeriod: MaterialButton
     private lateinit var btnLogSymptoms: MaterialButton
+    private lateinit var sliderCycleLength: Slider
 
     private lateinit var viewModel: MenstrualTrackerViewModel
 
@@ -49,6 +51,7 @@ class MenstrualTrackerActivity : AppCompatActivity() {
         tvAverageCycleLength = findViewById(R.id.tvAverageCycleLength)
         btnLogPeriod = findViewById(R.id.btnLogPeriod)
         btnLogSymptoms = findViewById(R.id.btnLogSymptoms)
+        sliderCycleLength = findViewById(R.id.sliderCycleLength)
 
         setupCalendarView()
         setupButtons()
@@ -76,6 +79,13 @@ class MenstrualTrackerActivity : AppCompatActivity() {
 
         btnLogSymptoms.setOnClickListener {
             showSymptomDialog()
+        }
+
+        sliderCycleLength.addOnChangeListener { slider, value, fromUser ->
+            if (fromUser) {
+                viewModel.updateUserCycleLength(value.toInt())
+                updateCycleInfo()
+            }
         }
     }
 
@@ -150,22 +160,31 @@ class MenstrualTrackerActivity : AppCompatActivity() {
                 viewModel.clearError()
             }
         }
+
+        viewModel.userCycleLength.observe(this) { cycleLength ->
+            sliderCycleLength.value = cycleLength.toFloat()
+            updateCycleInfo()
+        }
+
+        viewModel.cycleInfo.observe(this) { cycleInfo ->
+            updateUIWithCycleInfo(cycleInfo)
+        }
     }
 
     private fun updateCycleInfo() {
-        val currentDate = calendar.time
-        val cycleInfo = viewModel.getCycleInfo(currentDate)
-        val nextPeriodDate = viewModel.getPredictedNextPeriod()
-        val averageCycleLength = viewModel.getAverageCycleLength()
+        viewModel.updateCycleInfo(calendar.time)
+    }
 
+    private fun updateUIWithCycleInfo(cycleInfo: CycleInfo) {
         if (cycleInfo.dayOfPeriod > 0) {
             tvCurrentCycleInfo.text = "Hari ${cycleInfo.dayOfCycle} dari ${cycleInfo.cycleLength} (Hari ${cycleInfo.dayOfPeriod} menstruasi)"
         } else {
             tvCurrentCycleInfo.text = "Hari ${cycleInfo.dayOfCycle} dari ${cycleInfo.cycleLength}"
         }
 
+        val nextPeriodDate = viewModel.getPredictedNextPeriod()
         if (nextPeriodDate != null) {
-            val daysUntilNextPeriod = viewModel.calculateDaysBetween(currentDate, nextPeriodDate)
+            val daysUntilNextPeriod = viewModel.calculateDaysBetween(Calendar.getInstance().time, nextPeriodDate)
             tvNextPeriodInfo.text = when {
                 daysUntilNextPeriod > 0 -> "Menstruasi berikutnya dalam $daysUntilNextPeriod hari (${dateFormat.format(nextPeriodDate)})"
                 daysUntilNextPeriod == 0 -> "Menstruasi diperkirakan dimulai hari ini"
@@ -175,7 +194,7 @@ class MenstrualTrackerActivity : AppCompatActivity() {
             tvNextPeriodInfo.text = "Belum cukup data untuk memprediksi menstruasi berikutnya"
         }
 
-        tvAverageCycleLength.text = "Rata-rata panjang siklus: $averageCycleLength hari"
+        tvAverageCycleLength.text = "Rata-rata panjang siklus: ${cycleInfo.cycleLength} hari"
     }
 
     private fun showPeriodLogInfo() {
