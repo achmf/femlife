@@ -9,6 +9,7 @@ import com.example.femlife.databinding.ActivityMainBinding
 import com.example.femlife.ui.activities.auth.LoginActivity
 import com.example.femlife.ui.activities.overview.ProfileSetupActivity
 import com.example.femlife.ui.activities.profile.ProfileActivity
+import com.example.femlife.ui.fragments.femtalk.FemTalkFragment
 import com.example.femlife.ui.fragments.home.HomeFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -67,6 +68,7 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> loadFragment(HomeFragment())
+                R.id.nav_message -> loadFragment(FemTalkFragment())
                 else -> false
             }
         }

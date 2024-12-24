@@ -19,6 +19,12 @@ class MenstrualTrackerViewModel : ViewModel() {
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
+    private val _userCycleLength = MutableLiveData<Int>(MenstrualCycle.DEFAULT_CYCLE_LENGTH)
+    val userCycleLength: LiveData<Int> = _userCycleLength
+
+    private val _cycleInfo = MutableLiveData<CycleInfo>()
+    val cycleInfo: LiveData<CycleInfo> = _cycleInfo
+
     fun logPeriod(startDate: Date, endDate: Date) {
         val periodLength = calculateDaysBetween(startDate, endDate) + 1 // Include both start and end dates
 
@@ -42,6 +48,7 @@ class MenstrualTrackerViewModel : ViewModel() {
 
         val newCycle = MenstrualCycle(startDate, endDate, cycleLength, periodLength)
         _cycles.value = currentCycles + newCycle
+        updateCycleInfo(Calendar.getInstance().time)
     }
 
     fun logSymptom(date: Date, type: SymptomType, severity: Int) {
@@ -58,32 +65,44 @@ class MenstrualTrackerViewModel : ViewModel() {
         val lastCycle = _cycles.value?.lastOrNull() ?: return null
         val calendar = Calendar.getInstance()
         calendar.time = lastCycle.startDate
-        calendar.add(Calendar.DAY_OF_MONTH, lastCycle.cycleLength)
+        calendar.add(Calendar.DAY_OF_MONTH, _userCycleLength.value ?: MenstrualCycle.DEFAULT_CYCLE_LENGTH)
         return calendar.time
     }
 
     fun getCycleInfo(currentDate: Date): CycleInfo {
-        val lastCycle = _cycles.value?.lastOrNull() ?: return CycleInfo(0, 0, 0)
+        val lastCycle = _cycles.value?.lastOrNull()
+        val userCycleLength = _userCycleLength.value ?: MenstrualCycle.DEFAULT_CYCLE_LENGTH
+
+        if (lastCycle == null) {
+            return CycleInfo(0, 0, userCycleLength)
+        }
 
         val daysSinceStart = calculateDaysBetween(lastCycle.startDate, currentDate)
-        val dayOfCycle = daysSinceStart + 1 // Add 1 because the start day is day 1, not day 0
-
+        val dayOfCycle = (daysSinceStart % userCycleLength) + 1 // Add 1 because the start day is day 1, not day 0
         val dayOfPeriod = if (dayOfCycle <= lastCycle.periodLength) dayOfCycle else 0
 
-        return CycleInfo(dayOfCycle, dayOfPeriod, lastCycle.cycleLength)
+        return CycleInfo(dayOfCycle, dayOfPeriod, userCycleLength)
     }
 
     fun getAverageCycleLength(): Int {
-        val cycles = _cycles.value ?: return MenstrualCycle.DEFAULT_CYCLE_LENGTH
-        return if (cycles.size > 1) {
-            cycles.dropLast(1).map { it.cycleLength }.average().toInt()
+        return _userCycleLength.value ?: MenstrualCycle.DEFAULT_CYCLE_LENGTH
+    }
+
+    fun updateUserCycleLength(length: Int) {
+        if (length in MenstrualCycle.MIN_CYCLE_LENGTH..MenstrualCycle.MAX_CYCLE_LENGTH) {
+            _userCycleLength.value = length
+            updateCycleInfo(Calendar.getInstance().time)
         } else {
-            MenstrualCycle.DEFAULT_CYCLE_LENGTH
+            _error.value = "Panjang siklus harus antara ${MenstrualCycle.MIN_CYCLE_LENGTH} dan ${MenstrualCycle.MAX_CYCLE_LENGTH} hari."
         }
     }
 
     fun clearError() {
         _error.value = null
+    }
+
+    fun updateCycleInfo(currentDate: Date) {
+        _cycleInfo.value = getCycleInfo(currentDate)
     }
 
     fun calculateDaysBetween(start: Date, end: Date): Int {
@@ -109,4 +128,3 @@ data class CycleInfo(
     val dayOfPeriod: Int,
     val cycleLength: Int
 )
-
