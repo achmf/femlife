@@ -9,6 +9,7 @@ import com.example.femlife.config.ApiConfig
 import com.example.femlife.data.femtalk.Post
 import com.example.femlife.repository.PostRepository
 import kotlinx.coroutines.launch
+import com.example.femlife.data.femtalk.Comment
 
 class FemTalkViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -19,6 +20,16 @@ class FemTalkViewModel(application: Application) : AndroidViewModel(application)
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _postDetails = MutableLiveData<Post>()
+    val postDetails: LiveData<Post> = _postDetails
+
+    private val _comments = MutableLiveData<List<Comment>>()
+    val comments: LiveData<List<Comment>> = _comments
+
+    private val _commentAdded = MutableLiveData<Boolean>()
+    val commentAdded: LiveData<Boolean> = _commentAdded
+
 
     init {
         refreshPosts()
@@ -45,10 +56,37 @@ class FemTalkViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    fun getPostDetails(postId: String) {
+        viewModelScope.launch {
+            try {
+                val post = repository.getPostDetails(postId)
+                _postDetails.value = post
+            } catch (e: Exception) {
+                // Handle error
+            }
+        }
+    }
+
+    fun getComments(postId: String) {
+        viewModelScope.launch {
+            try {
+                val comments = repository.getComments(postId)
+                _comments.value = comments
+            } catch (e: Exception) {
+                // Handle error
+            }
+        }
+    }
+
     fun addComment(postId: String, comment: String) {
         viewModelScope.launch {
-            repository.addComment(postId, comment)
-            refreshPosts()
+            try {
+                repository.addComment(postId, comment)
+                _commentAdded.value = true
+            } catch (e: Exception) {
+                _commentAdded.value = false
+            }
         }
     }
 }
+
