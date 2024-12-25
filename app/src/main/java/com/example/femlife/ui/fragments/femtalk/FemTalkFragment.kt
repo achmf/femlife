@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.femlife.data.femtalk.Post
 import com.example.femlife.databinding.FragmentFemTalkBinding
 import com.example.femlife.ui.fragments.femtalk.create.CreateTalkActivity
+import com.example.femlife.ui.fragments.femtalk.detail.PostDetailActivity
 
 class FemTalkFragment : Fragment() {
 
@@ -48,8 +49,9 @@ class FemTalkFragment : Fragment() {
 
     private fun setupRecyclerView() {
         postAdapter = PostAdapter(
+            onPostClick = { post -> navigateToPostDetail(post) },
             onLikeClick = { post -> viewModel.likePost(post) },
-            onCommentClick = { post -> showCommentDialog(post) }
+            onCommentClick = { post -> navigateToPostDetail(post) }
         )
         binding.postsRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -84,8 +86,16 @@ class FemTalkFragment : Fragment() {
         // TODO: Implement comment dialog
     }
 
+    private fun navigateToPostDetail(post: Post) {
+        val intent = Intent(requireContext(), PostDetailActivity::class.java).apply {
+            putExtra("POST_ID", post.id)
+        }
+        startActivity(intent)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
+

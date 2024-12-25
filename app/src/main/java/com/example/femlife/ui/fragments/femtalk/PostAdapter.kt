@@ -10,6 +10,7 @@ import com.example.femlife.data.femtalk.Post
 import com.example.femlife.databinding.ItemPostBinding
 
 class PostAdapter(
+    private val onPostClick: (Post) -> Unit,
     private val onLikeClick: (Post) -> Unit,
     private val onCommentClick: (Post) -> Unit
 ) : ListAdapter<Post, PostAdapter.PostViewHolder>(PostDiffCallback()) {
@@ -33,6 +34,7 @@ class PostAdapter(
                     .into(ivPostImage)
 
                 btnLike.text = post.likes.toString()
+                root.setOnClickListener { onPostClick(post) }
                 btnLike.setOnClickListener { onLikeClick(post) }
                 btnComment.setOnClickListener { onCommentClick(post) }
             }
