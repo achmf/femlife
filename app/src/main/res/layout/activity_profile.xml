@@ -1,19 +1,17 @@
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white_background">
 
     <!-- Custom Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_profile"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/secondary"
-        android:elevation="4dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:background="@color/white">
 
         <ImageView
             android:id="@+id/iv_back_button"
@@ -37,192 +35,285 @@
 
     <!-- Foto Profil, Nama, dan Edit -->
     <LinearLayout
-        android:id="@+id/profile_header"
-        android:layout_width="0dp"
+        android:id="@+id/profile_header_wrapper"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_marginTop="16dp"
-        android:layout_marginHorizontal="16dp"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_profile"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <ImageView
-            android:id="@+id/iv_profile_picture"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:scaleType="centerCrop"
-            android:background="@drawable/circle_background"
-            android:contentDescription="Profile Picture" />
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:padding="16dp">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/profile_header"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginStart="16dp">
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/tv_user_name"
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/iv_profile_picture"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:scaleType="centerCrop"
+                android:contentDescription="Profile Picture"
+                app:shapeAppearanceOverlay="@style/RoundedImageView" />
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nama User"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:orientation="vertical"
+                android:layout_marginStart="16dp">
 
-            <TextView
-                android:id="@+id/tv_user_age"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="20 Tahun"
-                android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/tv_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nama User"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tv_edit_profile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Edit Profil"
-                android:drawableEnd="@drawable/ic_edit"
-                android:drawablePadding="4dp"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/tv_user_age"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="20 Tahun"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_edit_profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Edit Profil"
+                    android:drawableEnd="@drawable/ic_edit"
+                    android:drawablePadding="4dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
     <!-- Informasi Pengguna -->
     <LinearLayout
         android:id="@+id/profile_info"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="24dp"
-        android:layout_marginHorizontal="16dp"
-        android:background="@drawable/rounded_background"
+        android:layout_marginTop="12dp"
         android:padding="16dp"
-        app:layout_constraintTop_toBottomOf="@id/profile_header"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_logout">
+        android:background="@color/white">
 
         <!-- Title -->
         <TextView
             android:id="@+id/tv_info_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Informasi Pengguna"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
-
-        <!-- Grid Data -->
-        <GridLayout
-            android:id="@+id/grid_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="2"
-            android:rowCount="4"
-            android:layout_marginTop="8dp"
-            android:useDefaultMargins="true">
+            android:text="Informasi Pengguna"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginBottom="16dp" />
 
-            <!-- Tanggal Lahir -->
+        <!-- Tanggal Lahir -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/tv_label_birthplace"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tanggal Lahir"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tv_user_birthplace"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Jakarta, 1-8-2004"
+                android:textSize="14sp"
+                android:textColor="@color/grayText" />
+        </LinearLayout>
+
+        <!-- Lokasi -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/tv_label_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lokasi"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tv_user_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Jakarta"
+                android:textSize="14sp"
+                android:textColor="@color/grayText" />
+        </LinearLayout>
+
+        <!-- No Telepon -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/tv_label_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No Telp"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tv_user_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="08138004173"
+                android:textSize="14sp"
+                android:textColor="@color/grayText" />
+        </LinearLayout>
+
+        <!-- Email -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_label_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Email"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tv_user_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="namauser@gmail.com"
+                android:textSize="14sp"
+                android:textColor="@color/grayText" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Informasi Siklus Menstruasi -->
+    <LinearLayout
+        android:id="@+id/menstrual_cycle_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="12dp"
+        android:padding="16dp"
+        android:background="@color/white">
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tv_cycle_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Siklus Menstruasi"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Siklus Berikutnya dan Durasi Siklus -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- Siklus Berikutnya -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_label_birthplace"
+                    android:id="@+id/tv_next_cycle_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tanggal Lahir"
-                    android:textStyle="bold" />
+                    android:text="Siklus Berikutnya"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black" />
 
                 <TextView
-                    android:id="@+id/tv_user_birthplace"
+                    android:id="@+id/tv_next_cycle_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Jakarta, 1-8-2004" />
+                    android:text="30 Desember 2024"
+                    android:textSize="14sp"
+                    android:textColor="@color/grayText" />
             </LinearLayout>
 
-            <!-- Lokasi -->
+            <!-- Durasi Siklus -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_label_location"
+                    android:id="@+id/tv_cycle_duration_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Lokasi"
-                    android:textStyle="bold" />
+                    android:text="Durasi Siklus"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black" />
 
                 <TextView
-                    android:id="@+id/tv_user_location"
+                    android:id="@+id/tv_cycle_duration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Jakarta" />
+                    android:text="30 Hari"
+                    android:textSize="14sp"
+                    android:textColor="@color/grayText" />
             </LinearLayout>
+        </LinearLayout>
 
-            <!-- No Telepon -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_label_phone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="No Telp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_user_phone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="08138004173" />
-            </LinearLayout>
-
-            <!-- Email -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_label_email"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Email"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_user_email"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="namauser@gmail.com" />
-            </LinearLayout>
-        </GridLayout>
+        <!-- Progress Bar -->
+        <ProgressBar
+            android:id="@+id/progress_cycle"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:progress="50"
+            android:max="100"
+            android:progressTint="@color/black"
+            android:progressBackgroundTint="@color/gray"
+            android:indeterminateOnly="false"
+            android:indeterminateTintMode="src_in" />
     </LinearLayout>
 
     <!-- Logout Button -->
     <Button
         android:id="@+id/btn_logout"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_margin="16dp"
         android:text="Keluar"
         android:textSize="16sp"
         android:textColor="@color/white"
-        android:backgroundTint="?attr/colorError"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:backgroundTint="?attr/colorError" />
+</LinearLayout>

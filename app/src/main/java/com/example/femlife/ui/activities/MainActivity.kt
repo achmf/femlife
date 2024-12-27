@@ -2,6 +2,7 @@ package com.example.femlife.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.femlife.R
@@ -36,30 +37,31 @@ class MainActivity : AppCompatActivity() {
             .addOnSuccessListener { document ->
                 if (document.exists()) {
                     val isProfileCompleted = document.getBoolean("isProfileCompleted") ?: false
+                    val avatarResourceId = document.getLong("avatar")?.toInt() ?: R.drawable.default_avatar
+
                     if (isProfileCompleted) {
-                        // User sudah menyelesaikan setup, lanjutkan ke MainActivity
                         binding = ActivityMainBinding.inflate(layoutInflater)
                         setContentView(binding.root)
 
+                        // Set the avatar from Firestore
+                        binding.toolbar.findViewById<ImageView>(R.id.iv_profile_icon).setImageResource(avatarResourceId)
+
                         setupUI(savedInstanceState)
                     } else {
-                        // User belum menyelesaikan setup, arahkan ke ProfileSetupActivity
                         navigateToProfileSetupActivity()
                     }
                 } else {
-                    // Data user tidak ditemukan, kembali ke LoginActivity
                     navigateToLoginActivity()
                 }
             }
             .addOnFailureListener {
-                // Jika terjadi kesalahan saat memuat data, kembali ke LoginActivity
                 navigateToLoginActivity()
             }
     }
 
     private fun setupUI(savedInstanceState: Bundle?) {
         // Navigasi ke ProfileActivity saat profile icon diklik
-        binding.toolbar.findViewById<android.widget.ImageView>(R.id.iv_profile_icon).setOnClickListener {
+        binding.toolbar.findViewById<ImageView>(R.id.iv_profile_icon).setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
         }

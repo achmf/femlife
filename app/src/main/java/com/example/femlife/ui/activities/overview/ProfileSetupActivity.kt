@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.femlife.data.User
 import com.example.femlife.databinding.ActivityProfileSetupBinding
 import com.example.femlife.ui.activities.MainActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -86,20 +87,20 @@ class ProfileSetupActivity : AppCompatActivity() {
         val userId = currentUser.uid
         val email = currentUser.email ?: ""
 
-        // Buat data user dalam format Map
-        val userData = hashMapOf(
-            "name" to name,
-            "dateOfBirth" to dateOfBirth,
-            "location" to location,
-            "phoneNumber" to phoneNumber,
-            "age" to age,
-            "email" to email,
-            "isProfileCompleted" to true // Tandai bahwa user telah menyelesaikan setup
+        // Buat objek User
+        val user = User(
+            name = name,
+            dateOfBirth = dateOfBirth,
+            location = location,
+            phoneNumber = phoneNumber,
+            age = age,
+            email = email,
+            isProfileCompleted = true // Tandai bahwa user telah menyelesaikan setup
         )
 
-        // Simpan data ke Firestore
+        // Simpan data user ke Firestore
         firestore.collection("users").document(userId)
-            .set(userData)
+            .set(user)
             .addOnSuccessListener {
                 Toast.makeText(this, "Data berhasil disimpan!", Toast.LENGTH_SHORT).show()
 
