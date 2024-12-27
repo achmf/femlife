@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Week Section -->
+        <TextView
+            android:id="@+id/tvWeekLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Minggu kehamilan"
+            android:textSize="14sp"
+            android:textColor="#666666"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvWeek"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvWeekLabel" />
+
+        <!-- Month Section -->
+        <TextView
+            android:id="@+id/tvMonthLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bulan kehamilan"
+            android:textSize="14sp"
+            android:textColor="#666666"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvMonth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvMonthLabel" />
+
+        <ImageView
+            android:id="@+id/ivPregnancyImage"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintTop_toBottomOf="@id/tvWeek"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- What Happens Section -->
+        <TextView
+            android:id="@+id/tvWhatHappensTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Biasa Yang Terjadi"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivPregnancyImage" />
+
+        <LinearLayout
+            android:id="@+id/sectionWhatHappens"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/tvWhatHappensTitle" />
+
+        <!-- Tips Section -->
+        <TextView
+            android:id="@+id/tvTipsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Tips:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sectionWhatHappens" />
+
+        <LinearLayout
+            android:id="@+id/sectionTips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/tvTipsTitle" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
+
