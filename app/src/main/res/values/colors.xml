@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+
     <color name="white_background">#f7f8f9</color>
-    <color name="gray">#B3B3B3</color>
+    <color name="grayText">#616161</color>
+    <color name="gray">#757575</color>
     <color name="primary">#9dd6c5</color>
     <color name="secondary">#f9fafb</color>
     <color name="secondaryAccent">#b04464</color>
     <color name="primaryAccent">#44b090</color>
+
+    <!-- Material Design Guide Colors -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="background">#FFFFFF</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="onPrimary">#FFFFFF</color>
+    <color name="onSecondary">#000000</color>
+    <color name="error">#B00020</color>
+    <color name="onError">#FFFFFF</color>
+    <color name="onBackground">#000000</color>
+    <color name="onSurface">#000000</color>
 </resources>

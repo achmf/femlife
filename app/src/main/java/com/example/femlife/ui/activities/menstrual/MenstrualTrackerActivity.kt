@@ -1,6 +1,6 @@
 package com.example.femlife.ui.activities.menstrual
 
-import android.app.DatePickerDialog
+import android.app.Dialog
 import android.os.Bundle
 import android.widget.CalendarView
 import android.widget.TextView
@@ -13,6 +13,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.femlife.R
+import com.example.femlife.data.menstrual.CycleInfo
 import com.example.femlife.data.menstrual.SymptomType
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.slider.Slider
@@ -39,7 +40,7 @@ class MenstrualTrackerActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_menstrual_tracker)
 
-        viewModel = ViewModelProvider(this).get(MenstrualTrackerViewModel::class.java)
+        viewModel = ViewModelProvider(this)[MenstrualTrackerViewModel::class.java]
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -55,12 +56,25 @@ class MenstrualTrackerActivity : AppCompatActivity() {
 
         setupCalendarView()
         setupButtons()
+        setupToolbar(toolbar)
         observeViewModel()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+    }
+
+    private fun setupToolbar(toolbar: Toolbar) {
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.title = "Siklus Menstruasi" // Title for the toolbar
+
+        // Set up the navigation (back) button
+        toolbar.setNavigationOnClickListener {
+            onBackPressed() // Handle back button press
         }
     }
 
@@ -73,8 +87,7 @@ class MenstrualTrackerActivity : AppCompatActivity() {
 
     private fun setupButtons() {
         btnLogPeriod.setOnClickListener {
-            showPeriodLogInfo()
-            showDateRangePicker()
+            showCalendarPopup()
         }
 
         btnLogSymptoms.setOnClickListener {
@@ -89,40 +102,39 @@ class MenstrualTrackerActivity : AppCompatActivity() {
         }
     }
 
-    private fun showDateRangePicker() {
-        val startDatePicker = DatePickerDialog(
-            this,
-            { _, year, month, dayOfMonth ->
-                val startDate = Calendar.getInstance()
-                startDate.set(year, month, dayOfMonth)
-
-                val endDatePicker = DatePickerDialog(
-                    this,
-                    { _, endYear, endMonth, endDayOfMonth ->
-                        val endDate = Calendar.getInstance()
-                        endDate.set(endYear, endMonth, endDayOfMonth)
-
-                        if (endDate.before(startDate)) {
-                            Toast.makeText(this, "Tanggal akhir tidak boleh sebelum tanggal mulai", Toast.LENGTH_LONG).show()
-                        } else {
-                            viewModel.logPeriod(startDate.time, endDate.time)
-                            updateCycleInfo()
-                        }
-                    },
-                    year,
-                    month,
-                    dayOfMonth
-                )
-                endDatePicker.setTitle("Pilih Tanggal Akhir Menstruasi")
-                endDatePicker.show()
-            },
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        )
-        startDatePicker.setTitle("Pilih Tanggal Mulai Menstruasi")
-        startDatePicker.show()
+    private fun showCalendarPopup() {
+        showStartDateCalendar()
     }
+
+    private fun showStartDateCalendar() {
+        val dialog = Dialog(this)
+        val calendarPopupView = CalendarPopupView(this)
+        dialog.setContentView(calendarPopupView)
+
+        calendarPopupView.setLabel("Pilih tanggal mulai menstruasi")
+        calendarPopupView.setOnDateSelectedListener { startDate ->
+            dialog.dismiss()
+            showEndDateCalendar(startDate)
+        }
+
+        dialog.show()
+    }
+
+    private fun showEndDateCalendar(startDate: Date) {
+        val dialog = Dialog(this)
+        val calendarPopupView = CalendarPopupView(this)
+        dialog.setContentView(calendarPopupView)
+
+        calendarPopupView.setLabel("Pilih tanggal selesai menstruasi")
+        calendarPopupView.setOnDateSelectedListener { endDate ->
+            dialog.dismiss()
+            viewModel.logPeriod(startDate, endDate)
+            updateCycleInfo()
+        }
+
+        dialog.show()
+    }
+
 
     private fun showSymptomDialog() {
         val symptoms = SymptomType.values()
@@ -196,8 +208,5 @@ class MenstrualTrackerActivity : AppCompatActivity() {
 
         tvAverageCycleLength.text = "Rata-rata panjang siklus: ${cycleInfo.cycleLength} hari"
     }
-
-    private fun showPeriodLogInfo() {
-        Toast.makeText(this, "Pilih tanggal mulai dan akhir menstruasi", Toast.LENGTH_SHORT).show()
-    }
 }
+

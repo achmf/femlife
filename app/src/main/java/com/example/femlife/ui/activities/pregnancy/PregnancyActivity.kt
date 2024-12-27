@@ -3,8 +3,6 @@ package com.example.femlife.ui.activities.pregnancy
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.femlife.databinding.ActivityPregnancyBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -14,16 +12,10 @@ class PregnancyActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         binding = ActivityPregnancyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Handle padding for edge-to-edge display
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        setupToolbar()
 
         // Setup ViewPager2 with Adapter
         val pagerAdapter = PregnancyPagerAdapter(this)
@@ -39,4 +31,16 @@ class PregnancyActivity : AppCompatActivity() {
             }
         }.attach()
     }
+
+    private fun setupToolbar() {
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.title = "Panduan kehamilan"
+
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
+    }
 }
+

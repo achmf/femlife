@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
     kapt(libs.androidx.room.compiler) // Tambahkan ini untuk Room Compiler
 
     // Tab Layout ViewPager

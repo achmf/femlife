@@ -1,0 +1,27 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- RecyclerView untuk daftar avatar -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_avatar_list"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scrollbars="vertical" />
+
+    <!-- Tombol untuk reset ke default_avatar -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_reset_avatar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Reset"
+        android:textColor="@android:color/white"
+        app:backgroundTint="@color/primary" />
+
+    <!-- Tombol untuk simpan -->
+</LinearLayout>
