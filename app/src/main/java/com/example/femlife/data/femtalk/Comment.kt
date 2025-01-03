@@ -7,6 +7,6 @@ data class Comment(
     @DocumentId val id: String = "",
     val userId: String = "",
     val text: String = "",
-    val timestamp: Timestamp = Timestamp.now(),
-    val likes: Int = 0
+    val timestamp: Timestamp = Timestamp.now()
 )
+

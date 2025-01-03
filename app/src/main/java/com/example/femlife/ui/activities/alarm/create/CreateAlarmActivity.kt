@@ -38,11 +38,14 @@ class CreateAlarmActivity : AppCompatActivity() {
     }
 
     private fun setupToolbar() {
-        setSupportActionBar(binding.toolbarAlarm)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.title = "Tambah Alarm"
-        binding.toolbarAlarm.setNavigationOnClickListener { onBackPressed() }
+
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
     }
 
     private fun setupDateAndTimePickers() {
@@ -128,3 +131,4 @@ class CreateAlarmActivity : AppCompatActivity() {
         }
     }
 }
+

@@ -69,4 +69,33 @@ class ArticleRepository(private val context: Context) {
             Result.failure(e)
         }
     }
+
+    suspend fun deleteArticle(articleId: String): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            firestore.collection("articles").document(articleId).delete().await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun updateArticle(article: Article): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            firestore.collection("articles").document(article.id).set(article).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun updateArticleWithImage(article: Article, imageUri: Uri): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            val imageUrl = uploadImageToSupabase(imageUri)
+            val updatedArticle = article.copy(imageUrl = imageUrl)
+            firestore.collection("articles").document(article.id).set(updatedArticle).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

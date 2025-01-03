@@ -75,10 +75,11 @@ class CreateTalkActivity : AppCompatActivity() {
     private fun observeViewModel() {
         viewModel.isLoading.observe(this) { isLoading ->
             binding.topAppBar.menu.findItem(R.id.action_post)?.isEnabled = !isLoading
+            binding.progressBar.visibility = if (isLoading) android.view.View.VISIBLE else android.view.View.GONE
         }
 
-        viewModel.postCreated.observe(this) { isCreated ->
-            if (isCreated) {
+        viewModel.postCreated.observe(this) { post ->
+            if (post != null) {
                 setResult(RESULT_OK)
                 finish()
             }
@@ -89,3 +90,4 @@ class CreateTalkActivity : AppCompatActivity() {
         }
     }
 }
+
