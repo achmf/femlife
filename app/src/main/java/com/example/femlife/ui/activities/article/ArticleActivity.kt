@@ -10,9 +10,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.femlife.R
 import com.example.femlife.databinding.ActivityArticleBinding
 import com.example.femlife.data.article.Article
-import com.example.femlife.ui.activities.article.create.CreateArticleActivity
+import com.example.femlife.ui.activities.article.manager.create.CreateArticleActivity
 import com.example.femlife.ui.activities.article.detail.DetailArticleActivity
 import com.example.femlife.ui.activities.article.viewmodel.ArticleViewModel
+import com.example.femlife.ui.activities.article.manager.ArticleManagerActivity
 
 class ArticleActivity : AppCompatActivity() {
 
@@ -49,8 +50,8 @@ class ArticleActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_create_article -> {
-                val intent = Intent(this, CreateArticleActivity::class.java)
+            R.id.action_manage_articles -> {
+                val intent = Intent(this, ArticleManagerActivity::class.java)
                 startActivity(intent)
                 true
             }
@@ -79,3 +80,4 @@ class ArticleActivity : AppCompatActivity() {
         startActivity(intent)
     }
 }
+

@@ -15,6 +15,18 @@
         android:theme="@style/Theme.Femlife"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activities.anonchat.AnonChatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.fragments.femtalk.edit.EditTalkActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.article.manager.edit.EditArticleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.article.manager.ArticleManagerActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.fragments.femtalk.detail.PostDetailActivity"
             android:exported="false" />
         <activity
@@ -55,7 +67,7 @@
             android:name=".ui.activities.alarm.create.CreateAlarmActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.article.create.CreateArticleActivity"
+            android:name=".ui.activities.article.manager.create.CreateArticleActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activities.article.detail.DetailArticleActivity"

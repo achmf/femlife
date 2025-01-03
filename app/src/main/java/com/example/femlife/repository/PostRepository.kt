@@ -6,6 +6,7 @@ import com.example.femlife.config.ApiConfig
 import com.example.femlife.data.femtalk.Post
 import com.example.femlife.data.femtalk.Comment
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import io.github.jan.supabase.storage.storage
 import kotlinx.coroutines.Dispatchers
@@ -48,8 +49,7 @@ class PostRepository(private val context: Context, private val apiConfig: ApiCon
             val commentData = Comment(
                 userId = userId,
                 text = commentText,
-                timestamp = com.google.firebase.Timestamp.now(),
-                likes = 0
+                timestamp = com.google.firebase.Timestamp.now()
             )
             firestore.collection("posts").document(postId)
                 .collection("comments")
@@ -61,10 +61,11 @@ class PostRepository(private val context: Context, private val apiConfig: ApiCon
         }
     }
 
-    suspend fun createPost(imageUri: Uri, caption: String): Result<Post> = withContext(Dispatchers.IO) {
+    suspend fun createPost(imageUri: Uri, caption: String, userId: String): Result<Post> = withContext(Dispatchers.IO) {
         try {
             val imageUrl = uploadImageToSupabase(imageUri)
             val post = Post(
+                userId = userId,
                 imageUrl = imageUrl,
                 caption = caption,
                 likes = 0,
@@ -90,6 +91,38 @@ class PostRepository(private val context: Context, private val apiConfig: ApiCon
             .toObjects(Comment::class.java)
     }
 
+    suspend fun toggleLike(postId: String): Result<Post> = withContext(Dispatchers.IO) {
+        try {
+            val userId = auth.currentUser?.uid ?: throw IllegalStateException("User not logged in")
+            val postRef = firestore.collection("posts").document(postId)
+
+            val updatedPost = firestore.runTransaction { transaction ->
+                val post = transaction.get(postRef).toObject(Post::class.java)
+                    ?: throw IllegalStateException("Post not found")
+
+                val updatedLikedBy = if (userId in post.likedBy) {
+                    post.likedBy - userId
+                } else {
+                    post.likedBy + userId
+                }
+
+                val updatedLikes = updatedLikedBy.size
+
+                val updatedPost = post.copy(
+                    likes = updatedLikes,
+                    likedBy = updatedLikedBy
+                )
+
+                transaction.set(postRef, updatedPost)
+                updatedPost
+            }.await()
+
+            Result.success(updatedPost)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
 
     private suspend fun uploadImageToSupabase(uri: Uri): String = withContext(Dispatchers.IO) {
         val inputStream = context.contentResolver.openInputStream(uri)
@@ -100,4 +133,47 @@ class PostRepository(private val context: Context, private val apiConfig: ApiCon
 
         return@withContext supabase.storage["posts"].publicUrl(fileName) // Return the URL
     }
+
+    suspend fun deletePost(postId: String): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            firestore.collection("posts").document(postId).delete().await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun updatePost(post: Post): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            firestore.collection("posts").document(post.id).set(post).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun editComment(postId: String, commentId: String, newText: String): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            firestore.collection("posts").document(postId)
+                .collection("comments").document(commentId)
+                .update("text", newText)
+                .await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun deleteComment(postId: String, commentId: String): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            firestore.collection("posts").document(postId)
+                .collection("comments").document(commentId)
+                .delete()
+                .await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }
+

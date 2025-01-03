@@ -6,24 +6,25 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <!-- Custom Toolbar -->
+    <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_alarm"
-        android:layout_width="match_parent"
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
         android:background="@android:color/white"
         android:elevation="4dp"
-        app:navigationIcon="@drawable/ic_arrow_back"
-        app:titleTextColor="@android:color/black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:title="Tambah Alarm"
+        app:titleTextAppearance="@style/ToolbarTitleStyle" />
 
     <!-- Konten ScrollView di bawah Toolbar -->
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_alarm"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -186,3 +187,4 @@
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
+

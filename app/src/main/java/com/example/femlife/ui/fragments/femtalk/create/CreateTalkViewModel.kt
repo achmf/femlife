@@ -7,19 +7,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.femlife.config.ApiConfig
+import com.example.femlife.data.femtalk.Post
 import com.example.femlife.repository.PostRepository
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 class CreateTalkViewModel(application: Application) : AndroidViewModel(application) {
 
-    // Pass both application context and ApiConfig to PostRepository
     private val repository = PostRepository(application.applicationContext, ApiConfig)
+    private val auth = FirebaseAuth.getInstance()
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val _postCreated = MutableLiveData<Boolean>()
-    val postCreated: LiveData<Boolean> = _postCreated
+    private val _postCreated = MutableLiveData<Post?>()
+    val postCreated: LiveData<Post?> = _postCreated
 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
@@ -28,19 +30,23 @@ class CreateTalkViewModel(application: Application) : AndroidViewModel(applicati
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val result = repository.createPost(imageUri, caption)
-                result.onSuccess {
-                    _postCreated.value = true
+                val userId = auth.currentUser?.uid
+                    ?: throw IllegalStateException("User must be logged in to create a post")
+
+                val result = repository.createPost(imageUri, caption, userId)
+                result.onSuccess { post ->
+                    _postCreated.value = post
                 }.onFailure { e ->
                     _error.value = "Failed to create post: ${e.message}"
-                    _postCreated.value = false
+                    _postCreated.value = null
                 }
             } catch (e: Exception) {
                 _error.value = "An error occurred: ${e.message}"
-                _postCreated.value = false
+                _postCreated.value = null
             } finally {
                 _isLoading.value = false
             }
         }
     }
 }
+

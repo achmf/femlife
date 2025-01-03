@@ -1,4 +1,4 @@
-package com.example.femlife.ui.activities.article.create
+package com.example.femlife.ui.activities.article.manager.create
 
 import android.net.Uri
 import android.os.Bundle
@@ -37,6 +37,7 @@ class CreateArticleActivity : AppCompatActivity() {
     private fun setupToolbar() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.title = "Create Article"
 
         binding.toolbar.setNavigationOnClickListener {
