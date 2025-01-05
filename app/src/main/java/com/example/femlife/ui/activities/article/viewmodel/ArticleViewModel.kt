@@ -19,7 +19,7 @@ class ArticleViewModel(application: Application) : AndroidViewModel(application)
         fetchArticles()
     }
 
-    private fun fetchArticles() {
+    fun fetchArticles() {
         viewModelScope.launch {
             val result = articleRepository.getArticles()
             result.onSuccess { articleList ->

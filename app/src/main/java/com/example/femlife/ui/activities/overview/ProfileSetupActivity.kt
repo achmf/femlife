@@ -15,20 +15,18 @@ import java.util.*
 class ProfileSetupActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityProfileSetupBinding
-    private val firestore = FirebaseFirestore.getInstance() // Instance Firestore
-    private val firebaseAuth = FirebaseAuth.getInstance() // Instance FirebaseAuth
+    private val firestore = FirebaseFirestore.getInstance()
+    private val firebaseAuth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileSetupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Handle Tanggal Lahir
         binding.etDateOfBirth.setOnClickListener {
             showDatePicker()
         }
 
-        // Handle Tombol Submit
         binding.btnSubmit.setOnClickListener {
             handleSubmit()
         }
@@ -41,11 +39,8 @@ class ProfileSetupActivity : AppCompatActivity() {
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
         val datePickerDialog = DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
-            // Format Tanggal
             val date = "$selectedDay/${selectedMonth + 1}/$selectedYear"
             binding.etDateOfBirth.setText(date)
-
-            // Hitung Umur
             calculateAge(selectedYear, selectedMonth, selectedDay)
         }, year, month, day)
 
@@ -78,7 +73,6 @@ class ProfileSetupActivity : AppCompatActivity() {
             return
         }
 
-        // Dapatkan UID dan email user saat ini
         val currentUser = firebaseAuth.currentUser
         if (currentUser == null) {
             Toast.makeText(this, "User tidak ditemukan. Silakan login kembali.", Toast.LENGTH_SHORT).show()
@@ -87,7 +81,6 @@ class ProfileSetupActivity : AppCompatActivity() {
         val userId = currentUser.uid
         val email = currentUser.email ?: ""
 
-        // Buat objek User
         val user = User(
             name = name,
             dateOfBirth = dateOfBirth,
@@ -95,16 +88,13 @@ class ProfileSetupActivity : AppCompatActivity() {
             phoneNumber = phoneNumber,
             age = age,
             email = email,
-            isProfileCompleted = true // Tandai bahwa user telah menyelesaikan setup
+            profileCompleted = true // Ensure this matches the User data class
         )
 
-        // Simpan data user ke Firestore
         firestore.collection("users").document(userId)
             .set(user)
             .addOnSuccessListener {
                 Toast.makeText(this, "Data berhasil disimpan!", Toast.LENGTH_SHORT).show()
-
-                // Lanjutkan ke MainActivity
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             }
@@ -113,3 +103,4 @@ class ProfileSetupActivity : AppCompatActivity() {
             }
     }
 }
+
