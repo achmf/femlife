@@ -10,6 +10,7 @@ import com.example.femlife.databinding.ActivityMainBinding
 import com.example.femlife.ui.activities.auth.LoginActivity
 import com.example.femlife.ui.activities.overview.ProfileSetupActivity
 import com.example.femlife.ui.activities.profile.ProfileActivity
+import com.example.femlife.ui.fragments.chats.ChatFragment
 import com.example.femlife.ui.fragments.femtalk.FemTalkFragment
 import com.example.femlife.ui.fragments.home.HomeFragment
 import com.google.firebase.auth.FirebaseAuth
@@ -36,10 +37,10 @@ class MainActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
-                    val isProfileCompleted = document.getBoolean("isProfileCompleted") ?: false
+                    val profileCompleted = document.getBoolean("profileCompleted") ?: false
                     val avatarResourceId = document.getLong("avatar")?.toInt() ?: R.drawable.default_avatar
 
-                    if (isProfileCompleted) {
+                    if (profileCompleted) {
                         binding = ActivityMainBinding.inflate(layoutInflater)
                         setContentView(binding.root)
 
@@ -70,7 +71,8 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> loadFragment(HomeFragment())
-                R.id.nav_message -> loadFragment(FemTalkFragment())
+                R.id.nav_femtalk -> loadFragment(FemTalkFragment())
+                R.id.nav_anonchat -> loadFragment(ChatFragment())
                 else -> false
             }
         }
@@ -79,6 +81,35 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             binding.bottomNavigation.selectedItemId = R.id.nav_home
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fetchAndUpdateProfileIcon()
+    }
+
+    private fun fetchAndUpdateProfileIcon() {
+        val currentUser = firebaseAuth.currentUser
+        if (currentUser == null) {
+            navigateToLoginActivity()
+            return
+        }
+
+        val userId = currentUser.uid
+        firestore.collection("users").document(userId)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val avatarResourceId = document.getLong("avatar")?.toInt() ?: R.drawable.default_avatar
+                    val profileIcon = binding.toolbar.findViewById<ImageView>(R.id.iv_profile_icon)
+                    profileIcon.setImageResource(avatarResourceId)
+                } else {
+                    navigateToLoginActivity()
+                }
+            }
+            .addOnFailureListener {
+                // Tangani error di sini (opsional)
+            }
     }
 
     private fun navigateToLoginActivity() {

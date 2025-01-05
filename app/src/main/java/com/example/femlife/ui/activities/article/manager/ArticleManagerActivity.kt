@@ -110,5 +110,9 @@ class ArticleManagerActivity : AppCompatActivity() {
         val intent = Intent(this, CreateArticleActivity::class.java)
         startActivity(intent)
     }
-}
 
+    override fun onResume() {
+        super.onResume()
+        loadArticles() // Memastikan list artikel diperbarui setiap kali aktivitas kembali ke layar
+    }
+}

@@ -5,11 +5,11 @@
         android:icon="@drawable/ic_home"
         android:title="Home" />
     <item
-        android:id="@+id/nav_message"
-        android:icon="@drawable/ic_message"
+        android:id="@+id/nav_femtalk"
+        android:icon="@drawable/ic_femtalk"
         android:title="Messages" />
     <item
-        android:id="@+id/nav_heart"
-        android:icon="@drawable/ic_heart"
+        android:id="@+id/nav_anonchat"
+        android:icon="@drawable/ic_forum"
         android:title="Heart" />
 </menu>

@@ -67,9 +67,14 @@ class ProfileViewModel : ViewModel() {
                     _userLocation.postValue(document.getString("location") ?: "Tidak diketahui")
                     _userPhone.postValue(document.getString("phoneNumber") ?: "Tidak diketahui")
                     _userEmail.postValue(document.getString("email") ?: "Tidak diketahui")
-                    _userAvatar.postValue(
-                        document.getLong("avatar")?.toInt() ?: R.drawable.default_avatar
-                    )
+
+                    val avatarResId = document.getLong("avatar")?.toInt()
+                    if (avatarResId != null) {
+                        _userAvatar.postValue(avatarResId)
+                    } else {
+                        _userAvatar.postValue(R.drawable.default_avatar) // Gunakan default hanya jika avatar tidak ada
+                    }
+
                     _operationStatus.postValue("Data pengguna berhasil dimuat.")
                 } else {
                     _operationStatus.postValue("Data pengguna tidak ditemukan.")

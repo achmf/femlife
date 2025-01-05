@@ -12,6 +12,7 @@ import com.example.femlife.R
 import com.example.femlife.databinding.ActivityProfileBinding
 import com.example.femlife.ui.activities.auth.LoginActivity
 import com.example.femlife.ui.activities.profile.avatar.AvatarAdapter
+import com.example.femlife.ui.activities.profile.edit.EditProfileActivity
 import com.google.firebase.auth.FirebaseAuth
 
 class ProfileActivity : AppCompatActivity() {
@@ -44,8 +45,19 @@ class ProfileActivity : AppCompatActivity() {
             showAvatarPickerDialog()
         }
 
+        // Handle edit profile click
+        binding.tvEditProfile.setOnClickListener {
+            navigateToEditProfile()
+        }
+
         // Fetch data pengguna
         viewModel.fetchUserData()
+    }
+
+    // Tambahkan onResume untuk memuat data terbaru
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchUserData() // Memuat ulang data terbaru dari Firestore
     }
 
     private fun setupObservers() {
@@ -67,8 +79,12 @@ class ProfileActivity : AppCompatActivity() {
         viewModel.userEmail.observe(this) {
             binding.tvUserEmail.text = it
         }
-        viewModel.userAvatar.observe(this) {
-            binding.ivProfilePicture.setImageResource(it)
+        viewModel.userAvatar.observe(this) { avatarResId ->
+            // Hanya perbarui avatar jika berbeda dengan avatar saat ini
+            if (avatarResId != binding.ivProfilePicture.tag) {
+                binding.ivProfilePicture.setImageResource(avatarResId)
+                binding.ivProfilePicture.tag = avatarResId // Simpan tag untuk memastikan konsistensi
+            }
         }
         viewModel.operationStatus.observe(this) {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
@@ -94,6 +110,11 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         dialog.show()
+    }
+
+    private fun navigateToEditProfile() {
+        val intent = Intent(this, EditProfileActivity::class.java)
+        startActivity(intent)
     }
 
     private fun logoutUser() {

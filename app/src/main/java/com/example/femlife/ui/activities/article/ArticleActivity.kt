@@ -1,3 +1,4 @@
+// ArticleActivity.kt
 package com.example.femlife.ui.activities.article
 
 import android.content.Intent
@@ -79,5 +80,10 @@ class ArticleActivity : AppCompatActivity() {
         }
         startActivity(intent)
     }
-}
 
+    override fun onResume() {
+        super.onResume()
+        // Refresh the articles when the activity resumes
+        articleViewModel.fetchArticles()
+    }
+}

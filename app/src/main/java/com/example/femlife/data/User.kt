@@ -1,6 +1,7 @@
 package com.example.femlife.data
 
 import android.os.Parcelable
+import com.example.femlife.R
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -11,5 +12,6 @@ data class User(
     val phoneNumber: String = "",
     val age: String = "",
     val email: String = "",
-    val isProfileCompleted: Boolean = false
+    val profileCompleted: Boolean = false,
+    val avatar: Int = R.drawable.default_avatar
 ) : Parcelable

@@ -19,7 +19,7 @@
             android:layout_height="200dp"
             android:background="@drawable/headerbg">
 
-            <!-- Welcome Message -->
+            <!-- Welcome com.example.femlife.data.chat.Message -->
             <TextView
                 android:id="@+id/tv_welcome_message"
                 android:layout_width="wrap_content"
