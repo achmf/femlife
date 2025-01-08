@@ -38,7 +38,7 @@ class ChatGroupsAdapter(
         fun bind(chat: ChatGroup) {
             binding.apply {
                 tvChatName.text = chat.name
-                tvLastMessage.text = chat.lastMessage
+                tvLastMessage.text = chat.lastMessage.takeIf { it.isNotEmpty() } ?: "No messages yet"
                 tvTimestamp.text = formatTimestamp(chat.lastMessageTimestamp)
 
                 Glide.with(ivChatImage)
@@ -53,6 +53,8 @@ class ChatGroupsAdapter(
         }
 
         private fun formatTimestamp(timestamp: Long): String {
+            if (timestamp == 0L) return ""
+
             val now = System.currentTimeMillis()
             val diff = now - timestamp
 
@@ -76,3 +78,4 @@ class ChatGroupsAdapter(
         }
     }
 }
+

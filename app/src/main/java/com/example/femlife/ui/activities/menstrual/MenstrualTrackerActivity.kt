@@ -3,6 +3,7 @@ package com.example.femlife.ui.activities.menstrual
 import android.app.Dialog
 import android.os.Bundle
 import android.widget.CalendarView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -28,7 +29,9 @@ class MenstrualTrackerActivity : AppCompatActivity() {
     private lateinit var tvAverageCycleLength: TextView
     private lateinit var btnLogPeriod: MaterialButton
     private lateinit var btnLogSymptoms: MaterialButton
+    private lateinit var btnTestNotification: MaterialButton
     private lateinit var sliderCycleLength: Slider
+    private lateinit var progressBarNextPeriod: ProgressBar
 
     private lateinit var viewModel: MenstrualTrackerViewModel
 
@@ -52,7 +55,9 @@ class MenstrualTrackerActivity : AppCompatActivity() {
         tvAverageCycleLength = findViewById(R.id.tvAverageCycleLength)
         btnLogPeriod = findViewById(R.id.btnLogPeriod)
         btnLogSymptoms = findViewById(R.id.btnLogSymptoms)
+        btnTestNotification = findViewById(R.id.btnTestNotification)
         sliderCycleLength = findViewById(R.id.sliderCycleLength)
+        progressBarNextPeriod = findViewById(R.id.progressBarNextPeriod)
 
         setupCalendarView()
         setupButtons()
@@ -70,11 +75,10 @@ class MenstrualTrackerActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar?.title = "Siklus Menstruasi" // Title for the toolbar
+        supportActionBar?.title = "Siklus Menstruasi"
 
-        // Set up the navigation (back) button
         toolbar.setNavigationOnClickListener {
-            onBackPressed() // Handle back button press
+            onBackPressed()
         }
     }
 
@@ -94,7 +98,12 @@ class MenstrualTrackerActivity : AppCompatActivity() {
             showSymptomDialog()
         }
 
-        sliderCycleLength.addOnChangeListener { slider, value, fromUser ->
+        btnTestNotification.setOnClickListener {
+            viewModel.testNotification()
+            Toast.makeText(this, "Test notifications sent", Toast.LENGTH_SHORT).show()
+        }
+
+        sliderCycleLength.addOnChangeListener { _, value, fromUser ->
             if (fromUser) {
                 viewModel.updateUserCycleLength(value.toInt())
                 updateCycleInfo()
@@ -135,7 +144,6 @@ class MenstrualTrackerActivity : AppCompatActivity() {
         dialog.show()
     }
 
-
     private fun showSymptomDialog() {
         val symptoms = SymptomType.values()
         val items = symptoms.map { it.name.replace("_", " ").capitalize() }.toTypedArray()
@@ -162,7 +170,7 @@ class MenstrualTrackerActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        viewModel.cycles.observe(this) { cycles ->
+        viewModel.cycles.observe(this) { _ ->
             updateCycleInfo()
         }
 
@@ -197,12 +205,16 @@ class MenstrualTrackerActivity : AppCompatActivity() {
         val nextPeriodDate = viewModel.getPredictedNextPeriod()
         if (nextPeriodDate != null) {
             val daysUntilNextPeriod = viewModel.calculateDaysBetween(Calendar.getInstance().time, nextPeriodDate)
+            val progressPercentage = ((cycleInfo.cycleLength - daysUntilNextPeriod) * 100) / cycleInfo.cycleLength
+            progressBarNextPeriod.progress = progressPercentage
+
             tvNextPeriodInfo.text = when {
                 daysUntilNextPeriod > 0 -> "Menstruasi berikutnya dalam $daysUntilNextPeriod hari (${dateFormat.format(nextPeriodDate)})"
                 daysUntilNextPeriod == 0 -> "Menstruasi diperkirakan dimulai hari ini"
                 else -> "Menstruasi diperkirakan sudah dimulai ${-daysUntilNextPeriod} hari yang lalu"
             }
         } else {
+            progressBarNextPeriod.progress = 0
             tvNextPeriodInfo.text = "Belum cukup data untuk memprediksi menstruasi berikutnya"
         }
 

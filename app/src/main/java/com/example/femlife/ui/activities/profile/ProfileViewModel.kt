@@ -12,7 +12,6 @@ class ProfileViewModel : ViewModel() {
     private val firestore = FirebaseFirestore.getInstance()
     private val firebaseAuth = FirebaseAuth.getInstance()
 
-    // Daftar avatar yang tersedia
     val avatars = listOf(
         R.drawable.ava1,
         R.drawable.ava2,
@@ -22,7 +21,6 @@ class ProfileViewModel : ViewModel() {
         R.drawable.ava6
     )
 
-    // LiveData untuk data pengguna
     private val _userName = MutableLiveData<String>()
     val userName: LiveData<String> get() = _userName
 
@@ -44,11 +42,9 @@ class ProfileViewModel : ViewModel() {
     private val _userAvatar = MutableLiveData<Int>()
     val userAvatar: LiveData<Int> get() = _userAvatar
 
-    // LiveData untuk status operasi
     private val _operationStatus = MutableLiveData<String>()
     val operationStatus: LiveData<String> get() = _operationStatus
 
-    // Method untuk memuat data pengguna dari Firestore
     fun fetchUserData() {
         val currentUser = firebaseAuth.currentUser
         if (currentUser == null) {
@@ -69,12 +65,7 @@ class ProfileViewModel : ViewModel() {
                     _userEmail.postValue(document.getString("email") ?: "Tidak diketahui")
 
                     val avatarResId = document.getLong("avatar")?.toInt()
-                    if (avatarResId != null) {
-                        _userAvatar.postValue(avatarResId)
-                    } else {
-                        _userAvatar.postValue(R.drawable.default_avatar) // Gunakan default hanya jika avatar tidak ada
-                    }
-
+                    _userAvatar.postValue(avatarResId ?: R.drawable.default_avatar)
                     _operationStatus.postValue("Data pengguna berhasil dimuat.")
                 } else {
                     _operationStatus.postValue("Data pengguna tidak ditemukan.")
@@ -85,7 +76,6 @@ class ProfileViewModel : ViewModel() {
             }
     }
 
-    // Method untuk menyimpan avatar pengguna ke Firestore
     fun saveAvatarSelection(selectedAvatar: Int) {
         val currentUser = firebaseAuth.currentUser
         if (currentUser == null) {
@@ -105,7 +95,6 @@ class ProfileViewModel : ViewModel() {
             }
     }
 
-    // Method untuk mereset avatar ke default
     fun resetAvatarToDefault() {
         saveAvatarSelection(R.drawable.default_avatar)
     }

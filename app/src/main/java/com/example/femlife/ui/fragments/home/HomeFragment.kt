@@ -10,13 +10,14 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.femlife.data.menu.MenuItem
 import com.example.femlife.databinding.FragmentHomeBinding
-import com.example.femlife.ui.activities.alarm.AlarmActivity
 import com.example.femlife.ui.activities.article.ArticleActivity
-import com.example.femlife.ui.activities.menstrual.MenstrualTrackerActivity
-import com.example.femlife.ui.activities.postpregnancy.PostPregnancyActivity
-import com.example.femlife.ui.activities.postpregnancy.PostPregnancyPagerAdapter
-import com.example.femlife.ui.activities.pregnancy.PregnancyActivity
 import com.example.femlife.ui.activities.product.ProductActivity
+import com.example.femlife.ui.activities.alarm.AlarmActivity
+import com.example.femlife.ui.activities.menstrual.MenstrualTrackerActivity
+import com.example.femlife.ui.activities.pregnancy.PregnancyActivity
+import com.example.femlife.ui.activities.postpregnancy.PostPregnancyActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class HomeFragment : Fragment() {
 
@@ -24,6 +25,9 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private val homeViewModel: HomeViewModel by viewModels()
     private lateinit var adapter: HomeMenuAdapter
+
+    private val firestore = FirebaseFirestore.getInstance()
+    private val firebaseAuth = FirebaseAuth.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,8 +37,15 @@ class HomeFragment : Fragment() {
 
         setupRecyclerView()
         observeViewModel()
+        fetchUserName() // Ambil nama user dari Firestore pertama kali
 
         return binding.root
+    }
+
+    // Memanggil ulang fungsi fetchUserName saat fragment kembali ke layar
+    override fun onResume() {
+        super.onResume()
+        fetchUserName() // Pastikan data nama user selalu up-to-date
     }
 
     private fun setupRecyclerView() {
@@ -47,9 +58,29 @@ class HomeFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        // Mengamati data menuItems dari ViewModel
         homeViewModel.menuItems.observe(viewLifecycleOwner) { menuItems ->
             adapter.updateMenuItems(menuItems)
+        }
+    }
+
+    private fun fetchUserName() {
+        // Mendapatkan userId dari Firebase Authentication
+        val userId = firebaseAuth.currentUser?.uid
+        if (userId != null) {
+            // Ambil nama user dari Firestore berdasarkan userId
+            firestore.collection("users").document(userId).get()
+                .addOnSuccessListener { document ->
+                    if (document != null && document.exists()) {
+                        val userName = document.getString("name") ?: "User"
+                        binding.tvWelcomeMessage.text = "Halo, \n$userName"
+                    }
+                }
+                .addOnFailureListener {
+                    // Tangani error jika gagal mengambil data
+                    binding.tvWelcomeMessage.text = "Halo, \nUser"
+                }
+        } else {
+            binding.tvWelcomeMessage.text = "Halo, User"
         }
     }
 
@@ -79,7 +110,6 @@ class HomeFragment : Fragment() {
                 val intent = Intent(activity, MenstrualTrackerActivity::class.java)
                 startActivity(intent)
             }
-            // Tambahkan navigasi lainnya jika diperlukan...
         }
     }
 

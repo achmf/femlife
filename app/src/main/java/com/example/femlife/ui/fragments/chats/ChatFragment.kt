@@ -5,16 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.femlife.data.chat.ChatGroup
 import com.example.femlife.databinding.FragmentChatBinding
 import com.example.femlife.ui.fragments.chats.activity.chat.ChatDetailActivity
+import com.example.femlife.ui.fragments.chats.activity.chat.ChatViewModel
+import kotlinx.coroutines.launch
 
 class ChatFragment : Fragment() {
     private var _binding: FragmentChatBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var chatAdapter: ChatGroupsAdapter
+    private val viewModel: ChatViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,7 +35,7 @@ class ChatFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-        loadChatGroups()
+        observeChatGroups()
     }
 
     private fun setupRecyclerView() {
@@ -43,15 +50,14 @@ class ChatFragment : Fragment() {
         }
     }
 
-    private fun loadChatGroups() {
-        val femnonymChat = ChatGroup(
-            id = "1",
-            name = "Femnonym",
-            imageUrl = "https://example.com/femnonym_avatar.jpg",
-            lastMessage = "Welcome to Femnonym chat!",
-            lastMessageTimestamp = System.currentTimeMillis()
-        )
-        chatAdapter.submitList(listOf(femnonymChat))
+    private fun observeChatGroups() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.chatGroups.collect { chatGroups ->
+                    chatAdapter.submitList(chatGroups)
+                }
+            }
+        }
     }
 
     private fun navigateToChatDetail(chatGroup: ChatGroup) {
@@ -63,3 +69,4 @@ class ChatFragment : Fragment() {
         _binding = null
     }
 }
+

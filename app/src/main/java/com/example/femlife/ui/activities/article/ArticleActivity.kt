@@ -9,12 +9,11 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.femlife.R
-import com.example.femlife.databinding.ActivityArticleBinding
 import com.example.femlife.data.article.Article
-import com.example.femlife.ui.activities.article.manager.create.CreateArticleActivity
+import com.example.femlife.databinding.ActivityArticleBinding
 import com.example.femlife.ui.activities.article.detail.DetailArticleActivity
-import com.example.femlife.ui.activities.article.viewmodel.ArticleViewModel
 import com.example.femlife.ui.activities.article.manager.ArticleManagerActivity
+import com.example.femlife.ui.activities.article.viewmodel.ArticleViewModel
 
 class ArticleActivity : AppCompatActivity() {
 

@@ -212,100 +212,6 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Informasi Siklus Menstruasi -->
-    <LinearLayout
-        android:id="@+id/menstrual_cycle_info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="12dp"
-        android:padding="16dp"
-        android:background="@color/white">
-
-        <!-- Title -->
-        <TextView
-            android:id="@+id/tv_cycle_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Siklus Menstruasi"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Siklus Berikutnya dan Durasi Siklus -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <!-- Siklus Berikutnya -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_next_cycle_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Siklus Berikutnya"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black" />
-
-                <TextView
-                    android:id="@+id/tv_next_cycle_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="30 Desember 2024"
-                    android:textSize="14sp"
-                    android:textColor="@color/grayText" />
-            </LinearLayout>
-
-            <!-- Durasi Siklus -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_cycle_duration_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Durasi Siklus"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black" />
-
-                <TextView
-                    android:id="@+id/tv_cycle_duration"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="30 Hari"
-                    android:textSize="14sp"
-                    android:textColor="@color/grayText" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- Progress Bar -->
-        <ProgressBar
-            android:id="@+id/progress_cycle"
-            style="@android:style/Widget.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:progress="50"
-            android:max="100"
-            android:progressTint="@color/black"
-            android:progressBackgroundTint="@color/gray"
-            android:indeterminateOnly="false"
-            android:indeterminateTintMode="src_in" />
-    </LinearLayout>
-
     <!-- Logout Button -->
     <Button
         android:id="@+id/btn_logout"
@@ -316,4 +222,5 @@
         android:textSize="16sp"
         android:textColor="@color/white"
         android:backgroundTint="?attr/colorError" />
+
 </LinearLayout>

@@ -13,15 +13,24 @@ import com.example.femlife.data.menstrual.SymptomType
 import com.example.femlife.data.menstrual.room.MenstrualCycleEntity
 import com.example.femlife.data.menstrual.room.MenstrualTrackerDatabase
 import com.example.femlife.data.menstrual.room.SymptomEntity
+import com.example.femlife.data.notification.NotificationDatabase
+import com.example.femlife.repository.NotificationRepository
+import com.example.femlife.utils.NotificationHelper
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Calendar
+import java.util.Date
 
 class MenstrualTrackerViewModel(application: Application) : AndroidViewModel(application) {
 
     private val database = MenstrualTrackerDatabase.getDatabase(application)
     private val dao = database.menstrualTrackerDao()
+    private val notificationRepository = NotificationRepository(NotificationDatabase.getDatabase(application).notificationDao())
+    private var notificationHelper: NotificationHelper
+    private val userId: String = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
@@ -43,6 +52,11 @@ class MenstrualTrackerViewModel(application: Application) : AndroidViewModel(app
             Symptom(entity.date, entity.type, entity.severity)
         }
     }.asLiveData()
+
+    init {
+        notificationHelper = NotificationHelper(application, notificationRepository, userId)
+        setupNotificationChecks()
+    }
 
     fun logPeriod(startDate: Date, endDate: Date) {
         val periodLength = calculateDaysBetween(startDate, endDate) + 1 // Include both start and end dates
@@ -148,5 +162,54 @@ class MenstrualTrackerViewModel(application: Application) : AndroidViewModel(app
         endCalendar.set(Calendar.MILLISECOND, 0)
 
         return ((endCalendar.timeInMillis - startCalendar.timeInMillis) / (1000 * 60 * 60 * 24)).toInt()
+    }
+
+    private fun setupNotificationChecks() {
+        viewModelScope.launch {
+            // Check for notifications daily
+            while (true) {
+                checkAndSendNotifications()
+                delay(24 * 60 * 60 * 1000) // Wait 24 hours
+            }
+        }
+    }
+
+    private fun checkAndSendNotifications() {
+        val nextPeriod = getPredictedNextPeriod() ?: return
+        val today = Calendar.getInstance().time
+        val daysUntilNext = calculateDaysBetween(today, nextPeriod)
+
+        // Pre-menstrual notifications
+        when (daysUntilNext) {
+            2 -> notificationHelper.showPreMenstrualNotification(2)
+            3 -> notificationHelper.showPreMenstrualNotification(3)
+        }
+
+        // Get current cycle info
+        val currentCycleInfo = getCycleInfo(today)
+
+        // First day notification
+        if (currentCycleInfo.dayOfPeriod == 1) {
+            notificationHelper.showFirstDayNotification(true)
+        }
+
+        // Ovulation notification (typically around day 14 in a 28-day cycle)
+        if (currentCycleInfo.dayOfCycle == currentCycleInfo.cycleLength / 2) {
+            notificationHelper.showOvulationNotification(false)
+        }
+
+        // Last day notification
+        cycles.value?.firstOrNull()?.let { lastCycle ->
+            if (calculateDaysBetween(today, lastCycle.endDate) == 1) {
+                notificationHelper.showLastDayNotification(true)
+            }
+        }
+    }
+
+    fun testNotification() {
+        notificationHelper.showPreMenstrualNotification(2)
+        notificationHelper.showFirstDayNotification(true)
+        notificationHelper.showOvulationNotification(false)
+        notificationHelper.showLastDayNotification(true)
     }
 }
