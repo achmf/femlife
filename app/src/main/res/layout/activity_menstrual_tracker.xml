@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- Updated Toolbar -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -34,21 +33,22 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Removed CardView and used LinearLayout with background -->
+            <!-- Siklus Saat Ini Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@android:color/white"
+                android:background="@color/white"
                 android:layout_marginBottom="16dp"
                 android:padding="16dp"
+                android:elevation="8dp"
                 android:layout_gravity="center">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Siklus Saat Ini"
-                    android:textAppearance="?attr/textAppearanceHeadline6"/>
+                    android:textAppearance="?attr/textAppearanceHeadline6" />
 
                 <TextView
                     android:id="@+id/tvCurrentCycleInfo"
@@ -56,7 +56,34 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="Hari 1 dari 28"
-                    android:textAppearance="?attr/textAppearanceBody1"/>
+                    android:textAppearance="?attr/textAppearanceBody1" />
+            </LinearLayout>
+
+            <!-- Menuju Siklus Berikutnya Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/white"
+                android:layout_marginBottom="16dp"
+                android:padding="16dp"
+                android:elevation="8dp"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Menuju Siklus Berikutnya"
+                    android:textAppearance="?attr/textAppearanceHeadline6" />
+
+                <ProgressBar
+                    android:id="@+id/progressBarNextPeriod"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:max="100"
+                    android:progress="0" />
 
                 <TextView
                     android:id="@+id/tvNextPeriodInfo"
@@ -64,7 +91,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="Menstruasi berikutnya dalam 14 hari"
-                    android:textAppearance="?attr/textAppearanceBody1"/>
+                    android:textAppearance="?attr/textAppearanceBody1" />
 
                 <TextView
                     android:id="@+id/tvAverageCycleLength"
@@ -72,45 +99,47 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="Rata-rata panjang siklus: 28 hari"
-                    android:textAppearance="?attr/textAppearanceBody1"/>
+                    android:textAppearance="?attr/textAppearanceBody1" />
             </LinearLayout>
 
-            <!-- Removed CardView and used LinearLayout with background -->
+            <!-- Tanggal Hari Ini Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:background="@android:color/white"
                 android:layout_marginBottom="16dp"
+                android:elevation="8dp"
                 android:padding="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Tanggal Hari Ini"
-                    android:textAppearance="?attr/textAppearanceHeadline6"/>
+                    android:textAppearance="?attr/textAppearanceHeadline6" />
 
                 <CalendarView
                     android:id="@+id/calendarView"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
-                    android:layout_marginTop="8dp"/>
+                    android:layout_marginTop="8dp" />
             </LinearLayout>
 
-            <!-- Removed CardView and used LinearLayout with background -->
+            <!-- Panjang Siklus Menstruasi Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:background="@android:color/white"
                 android:layout_marginBottom="16dp"
+                android:elevation="8dp"
                 android:padding="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Panjang Siklus Menstruasi"
-                    android:textAppearance="?attr/textAppearanceHeadline6"/>
+                    android:textAppearance="?attr/textAppearanceHeadline6" />
 
                 <com.google.android.material.slider.Slider
                     android:id="@+id/sliderCycleLength"
@@ -124,15 +153,16 @@
                     app:thumbColor="@color/secondaryAccent"
                     app:tickColorInactive="@color/gray"
                     app:tickColorActive="@color/black"
-                    app:labelBehavior="withinBounds"/>
+                    app:labelBehavior="withinBounds" />
             </LinearLayout>
 
+            <!-- Buttons -->
             <Button
                 android:id="@+id/btnLogPeriod"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:text="Catat Menstruasi"/>
+                android:text="Catat Menstruasi" />
 
             <Button
                 android:id="@+id/btnLogSymptoms"
@@ -140,7 +170,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginHorizontal="16dp"
-                android:text="Catat Gejala"/>
+                android:text="Catat Gejala" />
+
+            <Button
+                android:id="@+id/btnTestNotification"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="16dp"
+                android:text="Test Notif" />
 
         </LinearLayout>
 

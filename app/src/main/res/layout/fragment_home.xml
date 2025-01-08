@@ -27,7 +27,6 @@
                 android:layout_marginStart="16dp"
                 android:layout_centerVertical="true"
                 android:layout_alignParentStart="true"
-                android:text="Halo, \nJohn Doe"
                 android:textSize="34sp"
                 android:textColor="@color/white"
                 android:textStyle="bold" />

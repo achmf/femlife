@@ -39,8 +39,8 @@
         <!-- Notification Icon -->
         <ImageView
             android:id="@+id/iv_notification_icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_gravity="end"
             android:layout_marginEnd="8dp"
             android:src="@drawable/ic_notification" />

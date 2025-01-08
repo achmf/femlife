@@ -32,6 +32,12 @@ class ProductManagerActivity : AppCompatActivity() {
         loadProducts()
     }
 
+    // Memuat ulang data produk setiap kali aktivitas kembali tampil
+    override fun onResume() {
+        super.onResume()
+        loadProducts() // Pastikan data selalu terupdate setelah menambah atau mengedit produk
+    }
+
     private fun setupToolbar() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

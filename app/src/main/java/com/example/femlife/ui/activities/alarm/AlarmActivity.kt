@@ -1,3 +1,4 @@
+// AlarmActivity.kt
 package com.example.femlife.ui.activities.alarm
 
 import android.content.Intent
@@ -6,7 +7,6 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.femlife.R
 import com.example.femlife.data.alarm.AlarmDatabase
@@ -84,14 +84,14 @@ class AlarmActivity : AppCompatActivity() {
 
     private fun observeAlarms() {
         // Observe LiveData untuk mendapatkan pembaruan alarm secara realtime
-        alarmViewModel.alarms.observe(this, Observer { alarms ->
+        alarmViewModel.alarms.observe(this) { alarms ->
             alarmAdapter.updateAlarms(alarms)
-        })
+        }
     }
 
     override fun onResume() {
         super.onResume()
         // Reload data saat aktivitas kembali ke foreground
-        alarmViewModel.reloadAlarms()
+        alarmViewModel.reloadAlarms() // This will refresh the alarm list
     }
 }

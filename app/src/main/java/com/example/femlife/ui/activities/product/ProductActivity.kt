@@ -57,6 +57,12 @@ class ProductActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Reload the products when the activity is resumed
+        loadProducts()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_product, menu)
         return true
