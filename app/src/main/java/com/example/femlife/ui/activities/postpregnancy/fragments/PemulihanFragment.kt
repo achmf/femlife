@@ -1,6 +1,8 @@
 package com.example.femlife.ui.activities.postpregnancy.fragments
 
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.BulletSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,19 +51,27 @@ class PemulihanFragment : Fragment() {
     }
 
     private fun addTipItem(container: LinearLayout, text: String) {
+        val spannableString = SpannableString(text).apply {
+            setSpan(BulletSpan(24), 0, text.length, 0) // Mengatur jarak antara titik dan teks
+        }
         val textView = TextView(requireContext()).apply {
-            this.text = "• $text"
+            this.text = spannableString
             setPadding(0, 0, 0, 16)
             textSize = 14f
+            setTextColor(resources.getColor(R.color.black)) // Warna teks
         }
         container.addView(textView)
     }
 
     private fun addWarningItem(container: LinearLayout, text: String) {
+        val spannableString = SpannableString(text).apply {
+            setSpan(BulletSpan(24), 0, text.length, 0) // Mengatur jarak antara titik dan teks
+        }
         val textView = TextView(requireContext()).apply {
-            this.text = "• $text"
-            setPadding(0, 0, 0, 8)
+            this.text = spannableString
+            setPadding(0, 0, 0, 16)
             textSize = 14f
+            setTextColor(resources.getColor(R.color.red)) // Warna teks untuk peringatan
         }
         container.addView(textView)
     }

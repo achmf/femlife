@@ -1,6 +1,7 @@
 [versions]
 agp = "8.6.1"
 artifactid = "version"
+coreSplashscreen = "1.0.1"
 daggerCompilerVersion = "2.51.1"
 firebaseAuthVersion = "22.0.0"
 firebaseBom = "33.7.0"
@@ -33,6 +34,7 @@ lifecycleLivedataKtx = "2.8.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCommon" }
 androidx-room-compiler-v250 = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }

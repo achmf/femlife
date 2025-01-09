@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.femlife.data.User
 import com.example.femlife.databinding.ActivityEditProfileBinding
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 class EditProfileActivity : AppCompatActivity() {
 
@@ -20,8 +20,20 @@ class EditProfileActivity : AppCompatActivity() {
         binding = ActivityEditProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupToolbar()
         setupUI()
         observeViewModel()
+    }
+
+    private fun setupToolbar() {
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.title = "Ubah Profil"
+
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
     }
 
     private fun setupUI() {
@@ -45,7 +57,7 @@ class EditProfileActivity : AppCompatActivity() {
 
         viewModel.operationStatus.observe(this) { status ->
             Toast.makeText(this, status, Toast.LENGTH_SHORT).show()
-            if (status == "Data updated successfully") {
+            if (status == "Data telah berhasil diperbarui") {
                 finish()
             }
         }
@@ -73,7 +85,7 @@ class EditProfileActivity : AppCompatActivity() {
         val email = binding.etEmail.text.toString().trim()
 
         if (name.isEmpty() || dateOfBirth.isEmpty() || location.isEmpty() || phoneNumber.isEmpty() || email.isEmpty()) {
-            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Semua field harus diisi", Toast.LENGTH_SHORT).show()
             return
         }
 

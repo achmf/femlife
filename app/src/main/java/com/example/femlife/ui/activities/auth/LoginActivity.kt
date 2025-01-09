@@ -85,7 +85,6 @@ class LoginActivity : AppCompatActivity() {
         firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    Toast.makeText(this, "Welcome ${firebaseAuth.currentUser?.displayName}", Toast.LENGTH_SHORT).show()
                     Log.d("LoginActivity", "SignInWithCredential:success")
                     checkUserDataInFirestore()
                 } else {

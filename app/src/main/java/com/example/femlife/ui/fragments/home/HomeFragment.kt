@@ -53,7 +53,7 @@ class HomeFragment : Fragment() {
             handleMenuClick(menuItem)
         }
 
-        binding.recyclerViewMenu.layoutManager = GridLayoutManager(context, 4)
+        binding.recyclerViewMenu.layoutManager = GridLayoutManager(context, 3)
         binding.recyclerViewMenu.adapter = adapter
     }
 

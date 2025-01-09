@@ -4,31 +4,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="8dp"
-    android:paddingVertical="4dp">
+    android:paddingStart="16dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="8dp">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/iv_avatar"
+        android:id="@+id/ivAvatar"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@id/tv_message"
+        android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
-        app:shapeAppearanceOverlay="@style/CircularImageView"
-        tools:src="@drawable/default_avatar" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/RoundedImageView"
+        tools:src="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/tv_message"
+        android:id="@+id/tvMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_message_received"
-        android:maxWidth="280dp"
-        android:padding="12dp"
         android:layout_marginStart="8dp"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        app:layout_constraintStart_toEndOf="@id/iv_avatar"
+        android:background="@drawable/bg_message_received"
+        android:maxWidth="260dp"
+        android:padding="12dp"
+        android:textColor="@android:color/black"
+        app:layout_constraintStart_toEndOf="@id/ivAvatar"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="This is a message from another user" />
+        tools:text="This is other's message" />
+
+    <TextView
+        android:id="@+id/tvTimestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@id/tvMessage"
+        app:layout_constraintTop_toBottomOf="@id/tvMessage"
+        tools:text="12:34 PM" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

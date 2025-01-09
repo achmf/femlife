@@ -38,6 +38,8 @@ class FemTalkViewModel(application: Application) : AndroidViewModel(application)
     private val _likeToggled = MutableLiveData<Boolean>()
     val likeToggled: LiveData<Boolean> = _likeToggled
 
+    private var allPosts: List<Post> = emptyList()
+
     init {
         refreshPosts()
     }
@@ -47,11 +49,22 @@ class FemTalkViewModel(application: Application) : AndroidViewModel(application)
             _isLoading.value = true
             try {
                 val result = repository.getPosts()
-                _posts.value = result.getOrNull() ?: emptyList()
+                allPosts = result.getOrNull() ?: emptyList()
+                _posts.value = allPosts
             } catch (e: Exception) {
                 _posts.value = emptyList() // Handle errors gracefully
             } finally {
                 _isLoading.value = false
+            }
+        }
+    }
+
+    fun searchPosts(query: String) {
+        if (query.isEmpty()) {
+            _posts.value = allPosts
+        } else {
+            _posts.value = allPosts.filter { post ->
+                post.caption.contains(query, ignoreCase = true)
             }
         }
     }
@@ -73,17 +86,6 @@ class FemTalkViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun getPostDetails(postId: String) {
-        viewModelScope.launch {
-            try {
-                val post = repository.getPostDetails(postId)
-                _postDetails.value = post
-            } catch (e: Exception) {
-                // Handle error
-            }
-        }
-    }
-
-    private fun refreshPostDetails(postId: String) {
         viewModelScope.launch {
             try {
                 val post = repository.getPostDetails(postId)
@@ -127,7 +129,6 @@ class FemTalkViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-
     fun editComment(postId: String, commentId: String, newText: String) {
         viewModelScope.launch {
             try {
@@ -161,6 +162,9 @@ class FemTalkViewModel(application: Application) : AndroidViewModel(application)
                 _individualPost.value = updatedPost
 
                 // Update the post in the list of all posts
+                allPosts = allPosts.map {
+                    if (it.id == postId) updatedPost else it
+                }
                 _posts.value = _posts.value?.map {
                     if (it.id == postId) updatedPost else it
                 }

@@ -29,7 +29,6 @@ class MenstrualTrackerActivity : AppCompatActivity() {
     private lateinit var tvAverageCycleLength: TextView
     private lateinit var btnLogPeriod: MaterialButton
     private lateinit var btnLogSymptoms: MaterialButton
-    private lateinit var btnTestNotification: MaterialButton
     private lateinit var sliderCycleLength: Slider
     private lateinit var progressBarNextPeriod: ProgressBar
 
@@ -55,7 +54,6 @@ class MenstrualTrackerActivity : AppCompatActivity() {
         tvAverageCycleLength = findViewById(R.id.tvAverageCycleLength)
         btnLogPeriod = findViewById(R.id.btnLogPeriod)
         btnLogSymptoms = findViewById(R.id.btnLogSymptoms)
-        btnTestNotification = findViewById(R.id.btnTestNotification)
         sliderCycleLength = findViewById(R.id.sliderCycleLength)
         progressBarNextPeriod = findViewById(R.id.progressBarNextPeriod)
 
@@ -96,11 +94,6 @@ class MenstrualTrackerActivity : AppCompatActivity() {
 
         btnLogSymptoms.setOnClickListener {
             showSymptomDialog()
-        }
-
-        btnTestNotification.setOnClickListener {
-            viewModel.testNotification()
-            Toast.makeText(this, "Test notifications sent", Toast.LENGTH_SHORT).show()
         }
 
         sliderCycleLength.addOnChangeListener { _, value, fromUser ->
@@ -196,26 +189,33 @@ class MenstrualTrackerActivity : AppCompatActivity() {
     }
 
     private fun updateUIWithCycleInfo(cycleInfo: CycleInfo) {
-        if (cycleInfo.dayOfPeriod > 0) {
-            tvCurrentCycleInfo.text = "Hari ${cycleInfo.dayOfCycle} dari ${cycleInfo.cycleLength} (Hari ${cycleInfo.dayOfPeriod} menstruasi)"
-        } else {
-            tvCurrentCycleInfo.text = "Hari ${cycleInfo.dayOfCycle} dari ${cycleInfo.cycleLength}"
-        }
-
-        val nextPeriodDate = viewModel.getPredictedNextPeriod()
-        if (nextPeriodDate != null) {
-            val daysUntilNextPeriod = viewModel.calculateDaysBetween(Calendar.getInstance().time, nextPeriodDate)
-            val progressPercentage = ((cycleInfo.cycleLength - daysUntilNextPeriod) * 100) / cycleInfo.cycleLength
-            progressBarNextPeriod.progress = progressPercentage
-
-            tvNextPeriodInfo.text = when {
-                daysUntilNextPeriod > 0 -> "Menstruasi berikutnya dalam $daysUntilNextPeriod hari (${dateFormat.format(nextPeriodDate)})"
-                daysUntilNextPeriod == 0 -> "Menstruasi diperkirakan dimulai hari ini"
-                else -> "Menstruasi diperkirakan sudah dimulai ${-daysUntilNextPeriod} hari yang lalu"
-            }
-        } else {
-            progressBarNextPeriod.progress = 0
+        if (cycleInfo.dayOfCycle == 0) {
+            tvCurrentCycleInfo.text = "Belum ada data siklus"
             tvNextPeriodInfo.text = "Belum cukup data untuk memprediksi menstruasi berikutnya"
+            progressBarNextPeriod.progress = 0
+        } else {
+            if (cycleInfo.dayOfPeriod > 0) {
+                tvCurrentCycleInfo.text = "Hari ${cycleInfo.dayOfCycle} dari ${cycleInfo.cycleLength} (Hari ${cycleInfo.dayOfPeriod} menstruasi)"
+            } else {
+                tvCurrentCycleInfo.text = "Hari ${cycleInfo.dayOfCycle} dari ${cycleInfo.cycleLength}"
+            }
+
+            val nextPeriodDate = viewModel.getPredictedNextPeriod()
+            if (nextPeriodDate != null) {
+                val today = Calendar.getInstance().time
+                val daysUntilNextPeriod = viewModel.calculateDaysBetween(today, nextPeriodDate)
+                val progressPercentage = ((cycleInfo.cycleLength - daysUntilNextPeriod) * 100) / cycleInfo.cycleLength
+                progressBarNextPeriod.progress = progressPercentage.coerceIn(0, 100)
+
+                tvNextPeriodInfo.text = when {
+                    daysUntilNextPeriod > 0 -> "Menstruasi berikutnya dalam $daysUntilNextPeriod hari (${dateFormat.format(nextPeriodDate)})"
+                    daysUntilNextPeriod == 0 -> "Menstruasi diperkirakan dimulai hari ini"
+                    else -> "Menstruasi diperkirakan sudah dimulai ${-daysUntilNextPeriod} hari yang lalu"
+                }
+            } else {
+                progressBarNextPeriod.progress = 0
+                tvNextPeriodInfo.text = "Belum cukup data untuk memprediksi menstruasi berikutnya"
+            }
         }
 
         tvAverageCycleLength.text = "Rata-rata panjang siklus: ${cycleInfo.cycleLength} hari"

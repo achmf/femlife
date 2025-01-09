@@ -1,26 +1,26 @@
 package com.example.femlife.data.menstrual.room
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MenstrualTrackerDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMenstrualCycle(cycle: MenstrualCycleEntity)
+
+    @Query("SELECT * FROM menstrual_cycles WHERE userId = :userId ORDER BY startDate DESC")
+    fun getAllMenstrualCycles(userId: String): Flow<List<MenstrualCycleEntity>>
+
+    @Query("SELECT * FROM symptoms WHERE userId = :userId ORDER BY date DESC")
+    fun getAllSymptoms(userId: String): Flow<List<SymptomEntity>>
+
+    @Query("SELECT * FROM menstrual_cycles WHERE userId = :userId ORDER BY startDate DESC LIMIT 1")
+    fun getLatestMenstrualCycle(userId: String): Flow<MenstrualCycleEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertSymptom(symptom: SymptomEntity)
+    suspend fun insertMenstrualCycle(menstrualCycleEntity: MenstrualCycleEntity)
 
-    @Query("SELECT * FROM menstrual_cycles ORDER BY startDate DESC")
-    fun getAllMenstrualCycles(): Flow<List<MenstrualCycleEntity>>
-
-    @Query("SELECT * FROM symptoms ORDER BY date DESC")
-    fun getAllSymptoms(): Flow<List<SymptomEntity>>
-
-    @Query("SELECT * FROM menstrual_cycles ORDER BY startDate DESC LIMIT 1")
-    fun getLatestMenstrualCycle(): Flow<MenstrualCycleEntity?>
-
-    @Query("SELECT AVG(cycleLength) FROM menstrual_cycles")
-    fun getAverageCycleLength(): Flow<Int?>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertSymptom(symptomEntity: SymptomEntity)
 }
-

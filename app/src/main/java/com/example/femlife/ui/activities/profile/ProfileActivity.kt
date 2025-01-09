@@ -1,9 +1,13 @@
 package com.example.femlife.ui.activities.profile
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.Window
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -13,12 +17,16 @@ import com.example.femlife.databinding.ActivityProfileBinding
 import com.example.femlife.ui.activities.auth.LoginActivity
 import com.example.femlife.ui.activities.profile.avatar.AvatarAdapter
 import com.example.femlife.ui.activities.profile.edit.EditProfileActivity
+import com.google.android.material.chip.Chip
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.firebase.auth.FirebaseAuth
 
 class ProfileActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityProfileBinding
     private lateinit var viewModel: ProfileViewModel
+
+    private var isLongPressed = false // To track long press for profile picture
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +35,7 @@ class ProfileActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
 
-        // Observasi data pengguna dari ViewModel
+        // Observe user data
         setupObservers()
 
         // Handle back button
@@ -40,9 +48,15 @@ class ProfileActivity : AppCompatActivity() {
             logoutUser()
         }
 
-        // Handle profile picture click
+        // Handle profile picture click & long press
         binding.ivProfilePicture.setOnClickListener {
-            showAvatarPickerDialog()
+            if (!isLongPressed) {
+                showAvatarPickerDialog()
+            }
+        }
+        binding.ivProfilePicture.setOnLongClickListener {
+            handleProfilePictureLongPress()
+            true
         }
 
         // Handle edit profile click
@@ -50,14 +64,13 @@ class ProfileActivity : AppCompatActivity() {
             navigateToEditProfile()
         }
 
-        // Fetch data pengguna
+        // Fetch user data
         viewModel.fetchUserData()
     }
 
-    // Tambahkan onResume untuk memuat data terbaru
     override fun onResume() {
         super.onResume()
-        viewModel.fetchUserData() // Memuat ulang data terbaru dari Firestore
+        viewModel.fetchUserData() // Reload latest data
     }
 
     private fun setupObservers() {
@@ -80,14 +93,16 @@ class ProfileActivity : AppCompatActivity() {
             binding.tvUserEmail.text = it
         }
         viewModel.userAvatar.observe(this) { avatarResId ->
-            // Hanya perbarui avatar jika berbeda dengan avatar saat ini
             if (avatarResId != binding.ivProfilePicture.tag) {
                 binding.ivProfilePicture.setImageResource(avatarResId)
-                binding.ivProfilePicture.tag = avatarResId // Simpan tag untuk memastikan konsistensi
+                binding.ivProfilePicture.tag = avatarResId
             }
         }
         viewModel.operationStatus.observe(this) {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+        }
+        viewModel.userRole.observe(this) { role ->
+            Toast.makeText(this, "Role saat ini: $role", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -99,14 +114,59 @@ class ProfileActivity : AppCompatActivity() {
         val recyclerView = dialog.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_avatar_list)
         recyclerView.layoutManager = GridLayoutManager(this, 3)
         recyclerView.adapter = AvatarAdapter(viewModel.avatars) { selectedAvatar ->
-            viewModel.saveAvatarSelection(selectedAvatar) // Update avatar via ViewModel
+            viewModel.saveAvatarSelection(selectedAvatar)
             dialog.dismiss()
         }
 
         val resetButton = dialog.findViewById<com.google.android.material.button.MaterialButton>(R.id.btn_reset_avatar)
         resetButton.setOnClickListener {
-            viewModel.resetAvatarToDefault() // Reset avatar via ViewModel
+            viewModel.resetAvatarToDefault()
             dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun handleProfilePictureLongPress() {
+        isLongPressed = true
+        Handler(Looper.getMainLooper()).postDelayed({
+            isLongPressed = false // Reset long press state
+        }, 1000) // Reset after 1 second
+
+        val inputDialog = AlertDialog.Builder(this)
+        val inputField = EditText(this)
+        inputField.hint = "Masukkan password"
+        inputDialog.setView(inputField)
+
+        inputDialog.setPositiveButton("Submit") { _, _ ->
+            val inputText = inputField.text.toString()
+            if (inputText == "admin123") {
+                showRoleToggleDialog()
+            } else {
+                Toast.makeText(this, "Password salah", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        inputDialog.setNegativeButton("Batal", null)
+        inputDialog.show()
+    }
+
+    private fun showRoleToggleDialog() {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_toggle_role)
+
+        val switchRole = dialog.findViewById<SwitchMaterial>(R.id.switch_role)
+
+        // Set initial state of the switch based on the current role
+        viewModel.userRole.value?.let { role ->
+            switchRole.isChecked = role == "admin"
+        }
+
+        // Listener untuk switch
+        switchRole.setOnCheckedChangeListener { _, isChecked ->
+            val newRole = if (isChecked) "admin" else "user"
+            viewModel.updateUserRole(newRole) // Update role di ViewModel
         }
 
         dialog.show()

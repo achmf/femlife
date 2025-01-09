@@ -6,4 +6,11 @@
     </style>
 
     <style name="Theme.Femlife" parent="Base.Theme.Femlife" />
+
+    <!-- Tema untuk Splash Screen -->
+    <style name="Theme.Femlife.SplashScreen" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white_background</item> <!-- Background warna splash -->
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item> <!-- Gambar logo animasi -->
+        <item name="windowSplashScreenIconBackgroundColor">@color/white_background</item> <!-- Background icon splash -->
+    </style>
 </resources>

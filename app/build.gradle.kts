@@ -45,6 +45,9 @@ android {
 val ktor_version: String by project
 
 dependencies {
+    // Splash Screen
+    implementation(libs.androidx.core.splashscreen)
+
     // Firebase BOM
     implementation(platform(libs.firebase.bom))
 
