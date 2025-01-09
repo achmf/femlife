@@ -25,7 +25,7 @@ class EditProfileViewModel : ViewModel() {
     private fun fetchUserData() {
         val currentUser = firebaseAuth.currentUser
         if (currentUser == null) {
-            _operationStatus.value = "User not found. Please login again."
+            _operationStatus.value = "User tidak ditemukan. Silakan login kembali"
             return
         }
 
@@ -36,28 +36,28 @@ class EditProfileViewModel : ViewModel() {
                     val user = document.toObject(User::class.java)
                     _userData.value = user
                 } else {
-                    _operationStatus.value = "User data not found."
+                    _operationStatus.value = "Data user tidak ditemukan"
                 }
             }
             .addOnFailureListener { e ->
-                _operationStatus.value = "Failed to load user data: ${e.message}"
+                _operationStatus.value = "Gagal memuat data user: ${e.message}"
             }
     }
 
     fun updateUserData(updatedData: Map<String, Any>) {
         val currentUser = firebaseAuth.currentUser
         if (currentUser == null) {
-            _operationStatus.value = "User not found. Please login again."
+            _operationStatus.value = "User tidak ditemukan. Silakan login kembali."
             return
         }
 
         firestore.collection("users").document(currentUser.uid)
             .update(updatedData)
             .addOnSuccessListener {
-                _operationStatus.value = "Data updated successfully"
+                _operationStatus.value = "Data berhasil diperbarui"
             }
             .addOnFailureListener { e ->
-                _operationStatus.value = "Failed to update data: ${e.message}"
+                _operationStatus.value = "Gagal memperbarui data: ${e.message}"
             }
     }
 }

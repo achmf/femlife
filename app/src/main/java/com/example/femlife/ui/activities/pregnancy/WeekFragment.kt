@@ -27,31 +27,41 @@ class WeekFragment : Fragment() {
 
         val week = arguments?.getInt(ARG_WEEK) ?: 0
         val month = arguments?.getInt(ARG_MONTH) ?: 0
+        val imageResId = arguments?.getInt(ARG_IMAGE_RES_ID) ?: R.drawable.ic_after_pregnancy
 
         binding.tvWeek.text = "Minggu ke-$week"
         binding.tvMonth.text = "Bulan ke-$month"
 
-        // Set pregnancy image
-        binding.ivPregnancyImage.setImageResource(R.drawable.pregnancy_week_4)
+        // Set pregnancy image dynamically
+        binding.ivPregnancyImage.setImageResource(imageResId)
 
         // Add what happens items
-        val whatHappensList = listOf(
+        val whatHappensList = getWhatHappensList(week)
+        populateWhatHappensList(whatHappensList)
+
+        // Add tips items
+        val tipsList = getTipsList(week)
+        populateTipsList(tipsList)
+    }
+
+    private fun getWhatHappensList(week: Int): List<String> {
+        // You can implement this method to return different lists based on the week
+        return listOf(
             "Mual dan muntah (morning sickness).",
             "Kelelahan yang berlebihan.",
             "Perubahan suasana hati akibat hormon.",
             "Payudara membesar dan sensitif."
         )
+    }
 
-        // Add tips items
-        val tipsList = listOf(
+    private fun getTipsList(week: Int): List<String> {
+        // You can implement this method to return different lists based on the week
+        return listOf(
             "Konsultasi dokter, periksa HCG.",
             "Konsumsi makanan sehat dan kaya nutrisi.",
             "Istirahat cukup untuk mengatasi kelelahan.",
             "Hindari kafein dan makanan pedas."
         )
-
-        populateWhatHappensList(whatHappensList)
-        populateTipsList(tipsList)
     }
 
     private fun populateWhatHappensList(items: List<String>) {
@@ -86,12 +96,14 @@ class WeekFragment : Fragment() {
     companion object {
         private const val ARG_WEEK = "week"
         private const val ARG_MONTH = "month"
+        private const val ARG_IMAGE_RES_ID = "image_res_id"
 
-        fun newInstance(week: Int, month: Int): WeekFragment {
+        fun newInstance(week: Int, month: Int, imageResId: Int): WeekFragment {
             return WeekFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_WEEK, week)
                     putInt(ARG_MONTH, month)
+                    putInt(ARG_IMAGE_RES_ID, imageResId)
                 }
             }
         }

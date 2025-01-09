@@ -15,12 +15,13 @@ class ArticleRepository(private val context: Context) {
     private val firestore = ApiConfig.firestore
     private val supabase = ApiConfig.supabase
 
-    suspend fun createArticle(title: String, description: String, imageUri: Uri): Result<Article> = withContext(Dispatchers.IO) {
+    suspend fun createArticle(title: String, description: String, content: String, imageUri: Uri): Result<Article> = withContext(Dispatchers.IO) {
         try {
             val imageUrl = uploadImageToSupabase(imageUri)
             val article = Article(
                 title = title,
                 description = description,
+                content = content,
                 imageUrl = imageUrl,
                 createdAt = Date()
             )
@@ -56,6 +57,7 @@ class ArticleRepository(private val context: Context) {
         }
     }
 
+    // ArticleRepository.kt
     suspend fun getArticleById(id: String): Result<Article> = withContext(Dispatchers.IO) {
         try {
             val document = firestore.collection("articles").document(id).get().await()

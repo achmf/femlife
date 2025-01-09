@@ -1,21 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#98D8C6"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="32dp"
     tools:context=".ui.activities.auth.LoginActivity">
+
+    <!-- Logo ImageView -->
+    <ImageView
+        android:id="@+id/iv_logo"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:src="@drawable/femlife_logo" />
+
+    <!-- Login Title -->
+    <TextView
+        android:id="@+id/tv_login_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Login to FEMLIFE+"
+        android:textSize="24sp"
+        android:textColor="#657c9f"
+        android:textStyle="bold"
+        android:layout_marginTop="42dp" />
 
     <!-- Google Sign-In Button -->
     <com.google.android.gms.common.SignInButton
         android:id="@+id/btn_google_sign_in"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_marginTop="24dp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

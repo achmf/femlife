@@ -13,5 +13,6 @@ data class User(
     val age: String = "",
     val email: String = "",
     val profileCompleted: Boolean = false,
-    val avatar: Int = R.drawable.default_avatar
+    val avatar: Int = R.drawable.default_avatar,
+    val role: String = "user"
 ) : Parcelable

@@ -1,6 +1,7 @@
 package com.example.femlife.ui.activities.menstrual
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -35,19 +36,19 @@ class MenstrualTrackerViewModel(application: Application) : AndroidViewModel(app
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
-    private val _userCycleLength = MutableLiveData<Int>(MenstrualCycle.DEFAULT_CYCLE_LENGTH)
+    private val _userCycleLength = MutableLiveData(MenstrualCycle.DEFAULT_CYCLE_LENGTH)
     val userCycleLength: LiveData<Int> = _userCycleLength
 
     private val _cycleInfo = MutableLiveData<CycleInfo>()
     val cycleInfo: LiveData<CycleInfo> = _cycleInfo
 
-    val cycles: LiveData<List<MenstrualCycle>> = dao.getAllMenstrualCycles().map { entities ->
+    val cycles: LiveData<List<MenstrualCycle>> = dao.getAllMenstrualCycles(userId).map { entities ->
         entities.map { entity ->
             MenstrualCycle(entity.startDate, entity.endDate, entity.cycleLength, entity.periodLength)
         }
     }.asLiveData()
 
-    val symptoms: LiveData<List<Symptom>> = dao.getAllSymptoms().map { entities ->
+    val symptoms: LiveData<List<Symptom>> = dao.getAllSymptoms(userId).map { entities ->
         entities.map { entity ->
             Symptom(entity.date, entity.type, entity.severity)
         }
@@ -59,72 +60,90 @@ class MenstrualTrackerViewModel(application: Application) : AndroidViewModel(app
     }
 
     fun logPeriod(startDate: Date, endDate: Date) {
-        val periodLength = calculateDaysBetween(startDate, endDate) + 1 // Include both start and end dates
+        val userId = this.userId // Pastikan userId tersedia
+        if (userId.isEmpty()) {
+            _error.value = "User tidak valid."
+            return
+        }
 
+        val periodLength = calculateDaysBetween(startDate, endDate) + 1
         if (periodLength < MenstrualCycle.MIN_PERIOD_LENGTH) {
             _error.value = "Durasi menstruasi minimal ${MenstrualCycle.MIN_PERIOD_LENGTH} hari."
             return
         }
-
         if (periodLength > MenstrualCycle.MAX_PERIOD_LENGTH) {
             _error.value = "Durasi menstruasi maksimal ${MenstrualCycle.MAX_PERIOD_LENGTH} hari."
             return
         }
 
         viewModelScope.launch {
-            val lastCycle = dao.getLatestMenstrualCycle().firstOrNull()
-            val cycleLength = if (lastCycle != null) {
-                calculateDaysBetween(lastCycle.startDate, startDate)
+            // Mendapatkan siklus terakhir yang ada
+            val lastCycle = dao.getLatestMenstrualCycle(userId).firstOrNull()
+
+            if (lastCycle != null) {
+                // Hapus validasi panjang siklus yang menyebabkan error
+                // const cycleLength = calculateDaysBetween(lastCycle.endDate, startDate) // Ini bisa diabaikan
+
+                // Menyimpan siklus baru tanpa validasi panjang siklus
+                val updatedCycle = lastCycle.copy(
+                    startDate = startDate,
+                    endDate = endDate,
+                    periodLength = periodLength
+                )
+                dao.insertMenstrualCycle(updatedCycle)  // Ganti data siklus lama
             } else {
-                MenstrualCycle.DEFAULT_CYCLE_LENGTH
+                // Jika tidak ada siklus sebelumnya, buat siklus baru
+                val cycleLength = MenstrualCycle.DEFAULT_CYCLE_LENGTH  // Anda dapat menentukan nilai default untuk siklus
+                val newCycle = MenstrualCycleEntity(
+                    userId = userId,
+                    startDate = startDate,
+                    endDate = endDate,
+                    cycleLength = cycleLength,
+                    periodLength = periodLength
+                )
+                dao.insertMenstrualCycle(newCycle)
             }
 
-            if (cycleLength < MenstrualCycle.MIN_CYCLE_LENGTH || cycleLength > MenstrualCycle.MAX_CYCLE_LENGTH) {
-                _error.value = "Panjang siklus harus antara ${MenstrualCycle.MIN_CYCLE_LENGTH} dan ${MenstrualCycle.MAX_CYCLE_LENGTH} hari."
-                return@launch
-            }
-
-            val newCycle = MenstrualCycleEntity(
-                startDate = startDate,
-                endDate = endDate,
-                cycleLength = cycleLength,
-                periodLength = periodLength
-            )
-            dao.insertMenstrualCycle(newCycle)
+            // Update info siklus setelah perubahan
             updateCycleInfo(Calendar.getInstance().time)
         }
     }
 
     fun logSymptom(date: Date, type: SymptomType, severity: Int) {
+        val userId = this.userId
+        if (userId.isEmpty()) {
+            _error.value = "User tidak valid."
+            return
+        }
         if (severity < 1 || severity > 5) {
             _error.value = "Tingkat keparahan harus antara 1 dan 5."
             return
         }
 
         viewModelScope.launch {
-            val symptom = SymptomEntity(date = date, type = type, severity = severity)
+            val symptom = SymptomEntity(
+                userId = userId,
+                date = date,
+                type = type,
+                severity = severity
+            )
             dao.insertSymptom(symptom)
         }
     }
 
     fun getPredictedNextPeriod(): Date? {
-        val lastCycle = cycles.value?.firstOrNull() ?: return null
+        val lastCycle = cycles.value?.firstOrNull()
+            ?: return null
         val calendar = Calendar.getInstance()
         calendar.time = lastCycle.startDate
         calendar.add(Calendar.DAY_OF_MONTH, _userCycleLength.value ?: MenstrualCycle.DEFAULT_CYCLE_LENGTH)
         return calendar.time
     }
 
-    fun getCycleInfo(currentDate: Date): CycleInfo {
-        val lastCycle = cycles.value?.firstOrNull()
+    private fun getCycleInfo(currentDate: Date, lastCycle: MenstrualCycleEntity): CycleInfo {
         val userCycleLength = _userCycleLength.value ?: MenstrualCycle.DEFAULT_CYCLE_LENGTH
-
-        if (lastCycle == null) {
-            return CycleInfo(0, 0, userCycleLength)
-        }
-
         val daysSinceStart = calculateDaysBetween(lastCycle.startDate, currentDate)
-        val dayOfCycle = (daysSinceStart % userCycleLength) + 1 // Add 1 because the start day is day 1, not day 0
+        val dayOfCycle = (daysSinceStart % userCycleLength) + 1
         val dayOfPeriod = if (dayOfCycle <= lastCycle.periodLength) dayOfCycle else 0
 
         return CycleInfo(dayOfCycle, dayOfPeriod, userCycleLength)
@@ -144,7 +163,15 @@ class MenstrualTrackerViewModel(application: Application) : AndroidViewModel(app
     }
 
     fun updateCycleInfo(currentDate: Date) {
-        _cycleInfo.value = getCycleInfo(currentDate)
+        viewModelScope.launch {
+            val lastCycle = dao.getLatestMenstrualCycle(userId).firstOrNull()
+            val cycleInfo = if (lastCycle != null) {
+                getCycleInfo(currentDate, lastCycle)
+            } else {
+                CycleInfo(0, 0, _userCycleLength.value ?: MenstrualCycle.DEFAULT_CYCLE_LENGTH)
+            }
+            _cycleInfo.value = cycleInfo
+        }
     }
 
     fun calculateDaysBetween(start: Date, end: Date): Int {
@@ -166,10 +193,9 @@ class MenstrualTrackerViewModel(application: Application) : AndroidViewModel(app
 
     private fun setupNotificationChecks() {
         viewModelScope.launch {
-            // Check for notifications daily
             while (true) {
                 checkAndSendNotifications()
-                delay(24 * 60 * 60 * 1000) // Wait 24 hours
+                delay(24 * 60 * 60 * 1000)
             }
         }
     }
@@ -179,37 +205,28 @@ class MenstrualTrackerViewModel(application: Application) : AndroidViewModel(app
         val today = Calendar.getInstance().time
         val daysUntilNext = calculateDaysBetween(today, nextPeriod)
 
-        // Pre-menstrual notifications
         when (daysUntilNext) {
             2 -> notificationHelper.showPreMenstrualNotification(2)
             3 -> notificationHelper.showPreMenstrualNotification(3)
         }
 
-        // Get current cycle info
-        val currentCycleInfo = getCycleInfo(today)
+        viewModelScope.launch {
+            val lastCycle = dao.getLatestMenstrualCycle(userId).firstOrNull()
+            if (lastCycle != null) {
+                val currentCycleInfo = getCycleInfo(today, lastCycle)
 
-        // First day notification
-        if (currentCycleInfo.dayOfPeriod == 1) {
-            notificationHelper.showFirstDayNotification(true)
-        }
+                if (currentCycleInfo.dayOfPeriod == 1) {
+                    notificationHelper.showFirstDayNotification(true)
+                }
 
-        // Ovulation notification (typically around day 14 in a 28-day cycle)
-        if (currentCycleInfo.dayOfCycle == currentCycleInfo.cycleLength / 2) {
-            notificationHelper.showOvulationNotification(false)
-        }
+                if (currentCycleInfo.dayOfCycle == currentCycleInfo.cycleLength / 2) {
+                    notificationHelper.showOvulationNotification(false)
+                }
 
-        // Last day notification
-        cycles.value?.firstOrNull()?.let { lastCycle ->
-            if (calculateDaysBetween(today, lastCycle.endDate) == 1) {
-                notificationHelper.showLastDayNotification(true)
+                if (calculateDaysBetween(today, lastCycle.endDate) == 1) {
+                    notificationHelper.showLastDayNotification(true)
+                }
             }
         }
-    }
-
-    fun testNotification() {
-        notificationHelper.showPreMenstrualNotification(2)
-        notificationHelper.showFirstDayNotification(true)
-        notificationHelper.showOvulationNotification(false)
-        notificationHelper.showLastDayNotification(true)
     }
 }

@@ -8,3 +8,4 @@ data class Message(
     val senderName: String = "",
     val senderAvatar: String = ""
 )
+

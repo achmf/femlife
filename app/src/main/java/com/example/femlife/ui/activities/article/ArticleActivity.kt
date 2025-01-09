@@ -1,4 +1,3 @@
-// ArticleActivity.kt
 package com.example.femlife.ui.activities.article
 
 import android.content.Intent
@@ -14,20 +13,28 @@ import com.example.femlife.databinding.ActivityArticleBinding
 import com.example.femlife.ui.activities.article.detail.DetailArticleActivity
 import com.example.femlife.ui.activities.article.manager.ArticleManagerActivity
 import com.example.femlife.ui.activities.article.viewmodel.ArticleViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ArticleActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityArticleBinding
     private lateinit var adapter: ArticleAdapter
-
     private val articleViewModel: ArticleViewModel by viewModels()
+    private val firestore = FirebaseFirestore.getInstance()
+    private val auth = FirebaseAuth.getInstance()
+    private var userRole: String? = null // Role akan diambil dari Firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityArticleBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupToolbar()
+        fetchUserRole { role ->
+            userRole = role
+            setupToolbar()
+        }
+
         setupRecyclerView()
         observeArticles()
     }
@@ -36,15 +43,21 @@ class ArticleActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar?.title = "Edukasi kesehatan"
+        supportActionBar?.title = "Edukasi Kesehatan"
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
+
+        if (userRole == "user") {
+            binding.toolbar.menu.clear() // Hapus menu untuk user biasa
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_article, menu)
+        if (userRole == "admin") {
+            menuInflater.inflate(R.menu.menu_article, menu) // Menu hanya untuk admin
+        }
         return true
     }
 
@@ -82,7 +95,22 @@ class ArticleActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Refresh the articles when the activity resumes
-        articleViewModel.fetchArticles()
+        articleViewModel.fetchArticles() // Refresh articles saat activity resume
+    }
+
+    private fun fetchUserRole(callback: (String?) -> Unit) {
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            firestore.collection("users").document(currentUser.uid).get()
+                .addOnSuccessListener { document ->
+                    val role = document.getString("role")
+                    callback(role)
+                }
+                .addOnFailureListener {
+                    callback(null) // Role tidak ditemukan
+                }
+        } else {
+            callback(null) // User tidak login
+        }
     }
 }
