@@ -31,7 +31,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@color/white_background" >
 
             <!-- Siklus Saat Ini Section -->
             <LinearLayout
@@ -48,6 +49,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Siklus Saat Ini"
+                    android:textColor="@color/black"
                     android:textAppearance="?attr/textAppearanceHeadline6" />
 
                 <TextView
@@ -56,6 +58,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="Hari 1 dari 28"
+                    android:textColor="@color/black"
                     android:textAppearance="?attr/textAppearanceBody1" />
             </LinearLayout>
 
@@ -74,6 +77,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Menuju Siklus Berikutnya"
+                    android:textColor="@color/black"
                     android:textAppearance="?attr/textAppearanceHeadline6" />
 
                 <ProgressBar
@@ -92,6 +96,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="Menstruasi berikutnya dalam 14 hari"
+                    android:textColor="@color/black"
                     android:textAppearance="?attr/textAppearanceBody1" />
 
                 <TextView
@@ -100,6 +105,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="Rata-rata panjang siklus: 28 hari"
+                    android:textColor="@color/black"
                     android:textAppearance="?attr/textAppearanceBody1" />
             </LinearLayout>
 
@@ -117,13 +123,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Tanggal Hari Ini"
+                    android:textColor="@color/black"
                     android:textAppearance="?attr/textAppearanceHeadline6" />
 
                 <CalendarView
                     android:id="@+id/calendarView"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
-                    android:layout_marginTop="8dp" />
+                    android:layout_marginTop="8dp"
+                    android:focusedMonthDateColor="@color/primary"
+                    />
             </LinearLayout>
 
             <!-- Panjang Siklus Menstruasi Section -->
@@ -140,6 +149,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Panjang Siklus Menstruasi"
+                    android:textColor="@color/black"
                     android:textAppearance="?attr/textAppearanceHeadline6" />
 
                 <com.google.android.material.slider.Slider
@@ -164,15 +174,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:text="Catat Menstruasi" />
-
-            <Button
-                android:id="@+id/btnLogSymptoms"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginBottom="8dp"
-                android:text="Catat Gejala" />
 
         </LinearLayout>
 

@@ -4,5 +4,6 @@ enum class NotificationType {
     PRE_MENSTRUAL,
     FIRST_DAY,
     OVULATION,
-    LAST_DAY
+    LAST_DAY,
+    NEW_ARTICLE
 }

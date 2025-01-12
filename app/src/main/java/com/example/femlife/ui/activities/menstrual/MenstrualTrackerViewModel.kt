@@ -1,7 +1,6 @@
 package com.example.femlife.ui.activities.menstrual
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,16 +8,11 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.femlife.data.menstrual.CycleInfo
 import com.example.femlife.data.menstrual.MenstrualCycle
-import com.example.femlife.data.menstrual.Symptom
 import com.example.femlife.data.menstrual.SymptomType
 import com.example.femlife.data.menstrual.room.MenstrualCycleEntity
 import com.example.femlife.data.menstrual.room.MenstrualTrackerDatabase
 import com.example.femlife.data.menstrual.room.SymptomEntity
-import com.example.femlife.data.notification.NotificationDatabase
-import com.example.femlife.repository.NotificationRepository
-import com.example.femlife.utils.NotificationHelper
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -29,12 +23,10 @@ class MenstrualTrackerViewModel(application: Application) : AndroidViewModel(app
 
     private val database = MenstrualTrackerDatabase.getDatabase(application)
     private val dao = database.menstrualTrackerDao()
-    private val notificationRepository = NotificationRepository(NotificationDatabase.getDatabase(application).notificationDao())
-    private var notificationHelper: NotificationHelper
     private val userId: String = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
-    private val _error = MutableLiveData<String>()
-    val error: LiveData<String> = _error
+    private val _error = MutableLiveData<String?>()
+    val error: MutableLiveData<String?> = _error
 
     private val _userCycleLength = MutableLiveData(MenstrualCycle.DEFAULT_CYCLE_LENGTH)
     val userCycleLength: LiveData<Int> = _userCycleLength
@@ -47,17 +39,6 @@ class MenstrualTrackerViewModel(application: Application) : AndroidViewModel(app
             MenstrualCycle(entity.startDate, entity.endDate, entity.cycleLength, entity.periodLength)
         }
     }.asLiveData()
-
-    val symptoms: LiveData<List<Symptom>> = dao.getAllSymptoms(userId).map { entities ->
-        entities.map { entity ->
-            Symptom(entity.date, entity.type, entity.severity)
-        }
-    }.asLiveData()
-
-    init {
-        notificationHelper = NotificationHelper(application, notificationRepository, userId)
-        setupNotificationChecks()
-    }
 
     fun logPeriod(startDate: Date, endDate: Date) {
         val userId = this.userId // Pastikan userId tersedia
@@ -77,23 +58,17 @@ class MenstrualTrackerViewModel(application: Application) : AndroidViewModel(app
         }
 
         viewModelScope.launch {
-            // Mendapatkan siklus terakhir yang ada
             val lastCycle = dao.getLatestMenstrualCycle(userId).firstOrNull()
 
             if (lastCycle != null) {
-                // Hapus validasi panjang siklus yang menyebabkan error
-                // const cycleLength = calculateDaysBetween(lastCycle.endDate, startDate) // Ini bisa diabaikan
-
-                // Menyimpan siklus baru tanpa validasi panjang siklus
                 val updatedCycle = lastCycle.copy(
                     startDate = startDate,
                     endDate = endDate,
                     periodLength = periodLength
                 )
-                dao.insertMenstrualCycle(updatedCycle)  // Ganti data siklus lama
+                dao.insertMenstrualCycle(updatedCycle)
             } else {
-                // Jika tidak ada siklus sebelumnya, buat siklus baru
-                val cycleLength = MenstrualCycle.DEFAULT_CYCLE_LENGTH  // Anda dapat menentukan nilai default untuk siklus
+                val cycleLength = MenstrualCycle.DEFAULT_CYCLE_LENGTH
                 val newCycle = MenstrualCycleEntity(
                     userId = userId,
                     startDate = startDate,
@@ -104,7 +79,6 @@ class MenstrualTrackerViewModel(application: Application) : AndroidViewModel(app
                 dao.insertMenstrualCycle(newCycle)
             }
 
-            // Update info siklus setelah perubahan
             updateCycleInfo(Calendar.getInstance().time)
         }
     }
@@ -189,44 +163,5 @@ class MenstrualTrackerViewModel(application: Application) : AndroidViewModel(app
         endCalendar.set(Calendar.MILLISECOND, 0)
 
         return ((endCalendar.timeInMillis - startCalendar.timeInMillis) / (1000 * 60 * 60 * 24)).toInt()
-    }
-
-    private fun setupNotificationChecks() {
-        viewModelScope.launch {
-            while (true) {
-                checkAndSendNotifications()
-                delay(24 * 60 * 60 * 1000)
-            }
-        }
-    }
-
-    private fun checkAndSendNotifications() {
-        val nextPeriod = getPredictedNextPeriod() ?: return
-        val today = Calendar.getInstance().time
-        val daysUntilNext = calculateDaysBetween(today, nextPeriod)
-
-        when (daysUntilNext) {
-            2 -> notificationHelper.showPreMenstrualNotification(2)
-            3 -> notificationHelper.showPreMenstrualNotification(3)
-        }
-
-        viewModelScope.launch {
-            val lastCycle = dao.getLatestMenstrualCycle(userId).firstOrNull()
-            if (lastCycle != null) {
-                val currentCycleInfo = getCycleInfo(today, lastCycle)
-
-                if (currentCycleInfo.dayOfPeriod == 1) {
-                    notificationHelper.showFirstDayNotification(true)
-                }
-
-                if (currentCycleInfo.dayOfCycle == currentCycleInfo.cycleLength / 2) {
-                    notificationHelper.showOvulationNotification(false)
-                }
-
-                if (calculateDaysBetween(today, lastCycle.endDate) == 1) {
-                    notificationHelper.showLastDayNotification(true)
-                }
-            }
-        }
     }
 }

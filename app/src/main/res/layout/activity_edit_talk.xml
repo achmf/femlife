@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/white_background">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -13,6 +14,9 @@
             android:id="@+id/topAppBar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:backgroundTint="@color/primary"
+            app:titleTextColor="@color/white"
+            app:navigationIconTint="@color/white"
             app:title="Edit Post"
             app:menu="@menu/edit_talk_menu"
             app:navigationIcon="@drawable/ic_arrow_back" />
@@ -41,6 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                app:boxStrokeColor="@color/primary"
                 android:hint="Caption">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -48,6 +53,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"
+                    android:textColor="@color/black"
                     android:minLines="3" />
 
             </com.google.android.material.textfield.TextInputLayout>

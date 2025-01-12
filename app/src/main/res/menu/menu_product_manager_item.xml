@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/action_edit_product"
-        android:title="Edit Produk" />
+        android:title="Ubah Produk" />
     <item
         android:id="@+id/action_delete_product"
         android:title="Hapus Produk" />

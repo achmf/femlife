@@ -31,37 +31,65 @@ class WeekFragment : Fragment() {
 
         binding.tvWeek.text = "Minggu ke-$week"
         binding.tvMonth.text = "Bulan ke-$month"
-
-        // Set pregnancy image dynamically
         binding.ivPregnancyImage.setImageResource(imageResId)
 
-        // Add what happens items
         val whatHappensList = getWhatHappensList(week)
         populateWhatHappensList(whatHappensList)
 
-        // Add tips items
         val tipsList = getTipsList(week)
         populateTipsList(tipsList)
     }
 
     private fun getWhatHappensList(week: Int): List<String> {
-        // You can implement this method to return different lists based on the week
-        return listOf(
-            "Mual dan muntah (morning sickness).",
-            "Kelelahan yang berlebihan.",
-            "Perubahan suasana hati akibat hormon.",
-            "Payudara membesar dan sensitif."
-        )
+        return when {
+            // Trimester 1 (weeks 1-13)
+            week <= 13 -> listOf(
+                "Mual dan muntah (morning sickness).",
+                "Kelelahan yang berlebihan.",
+                "Perubahan suasana hati akibat hormon.",
+                "Payudara membesar dan sensitif."
+            )
+            // Trimester 2 (weeks 14-26)
+            week <= 26 -> listOf(
+                "Nafsu makan meningkat.",
+                "Perut mulai membesar.",
+                "Merasakan gerakan janin.",
+                "Sakit punggung dan kram kaki."
+            )
+            // Trimester 3 (weeks 27-40)
+            else -> listOf(
+                "Perut semakin besar",
+                "Sesak napas.",
+                "Sulit tidur, kaki bengkak, dan kontraksi palsu (Braxton Hicks).",
+                "Sering buang air kecil dan nyeri panggul."
+            )
+        }
     }
 
     private fun getTipsList(week: Int): List<String> {
-        // You can implement this method to return different lists based on the week
-        return listOf(
-            "Konsultasi dokter, periksa HCG.",
-            "Konsumsi makanan sehat dan kaya nutrisi.",
-            "Istirahat cukup untuk mengatasi kelelahan.",
-            "Hindari kafein dan makanan pedas."
-        )
+        return when {
+            // Trimester 1 tips
+            week <= 13 -> listOf(
+                "Konsultasi dokter, periksa HCG.",
+                "Konsumsi makanan sehat dan kaya nutrisi.",
+                "Istirahat cukup untuk mengatasi kelelahan.",
+                "Hindari kafein dan makanan pedas."
+            )
+            // Trimester 2 tips
+            week <= 26 -> listOf(
+                "Jaga pola makan seimbang.",
+                "Lakukan olahraga ringan yang aman.",
+                "Perhatikan postur tubuh saat beraktivitas.",
+                "Rutin kontrol ke dokter."
+            )
+            // Trimester 3 tips
+            else -> listOf(
+                "Persiapkan kelahiran dengan matang.",
+                "Lakukan senam hamil jika diizinkan.",
+                "Hindari aktivitas berat.",
+                "Perhatikan tanda-tanda persalinan."
+            )
+        }
     }
 
     private fun populateWhatHappensList(items: List<String>) {
@@ -109,4 +137,3 @@ class WeekFragment : Fragment() {
         }
     }
 }
-

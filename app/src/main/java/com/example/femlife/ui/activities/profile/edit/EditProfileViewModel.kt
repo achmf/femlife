@@ -3,6 +3,7 @@ package com.example.femlife.ui.activities.profile.edit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.femlife.R
 import com.example.femlife.data.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -17,6 +18,18 @@ class EditProfileViewModel : ViewModel() {
 
     private val _operationStatus = MutableLiveData<String>()
     val operationStatus: LiveData<String> = _operationStatus
+
+    private val defaultUser = User(
+        name = "Unknown",
+        dateOfBirth = "01-01-1900",
+        location = "Unknown",
+        phoneNumber = "N/A",
+        age = "0",
+        email = "unknown@example.com",
+        profileCompleted = false,
+        avatar = R.drawable.default_avatar,
+        role = "user"
+    )
 
     init {
         fetchUserData()
@@ -34,7 +47,7 @@ class EditProfileViewModel : ViewModel() {
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
                     val user = document.toObject(User::class.java)
-                    _userData.value = user
+                    _userData.value = user ?: defaultUser // Assign defaultUser if user is null
                 } else {
                     _operationStatus.value = "Data user tidak ditemukan"
                 }

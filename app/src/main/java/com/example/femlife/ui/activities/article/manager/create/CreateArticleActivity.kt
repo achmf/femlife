@@ -2,11 +2,15 @@ package com.example.femlife.ui.activities.article.manager.create
 
 import android.net.Uri
 import android.os.Bundle
-import android.view.KeyEvent
+import android.text.InputType
+import android.view.View
+import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.femlife.data.article.ContentItem
 import com.example.femlife.databinding.ActivityCreateArticleBinding
 import com.example.femlife.repository.ArticleRepository
 import kotlinx.coroutines.launch
@@ -15,13 +19,14 @@ class CreateArticleActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCreateArticleBinding
     private lateinit var articleRepository: ArticleRepository
+    private val contentViews = mutableListOf<View>()
     private var selectedImageUri: Uri? = null
 
-    // For selecting an image
-    private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        uri?.let {
-            selectedImageUri = it
-            binding.imageViewPreview.setImageURI(it)
+    private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        if (uri != null) {
+            selectedImageUri = uri
+            binding.imageViewPreview.setImageURI(uri)
+            binding.imageViewPreview.visibility = View.VISIBLE
         }
     }
 
@@ -31,7 +36,6 @@ class CreateArticleActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         articleRepository = ArticleRepository(this)
-
         setupToolbar()
         setupListeners()
     }
@@ -48,49 +52,67 @@ class CreateArticleActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
-        // Button to select an image
-        binding.buttonSelectImage.setOnClickListener {
-            getContent.launch("image/*")
-        }
+        binding.buttonAddParagraph.setOnClickListener { addParagraphField() }
+        binding.buttonAddHeading.setOnClickListener { addHeadingField() }
+        binding.buttonUploadImage.setOnClickListener { imagePickerLauncher.launch("image/*") }
+        binding.buttonCreateArticle.setOnClickListener { createArticle() }
+    }
 
-        // Automatically add list formatting when typing `- `
-        binding.editTextContent.setOnKeyListener { _, keyCode, event ->
-            if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_SPACE) {
-                val currentText = binding.editTextContent.text.toString()
-                if (currentText.endsWith("- ")) {
-                    binding.editTextContent.append("\n- ")
-                }
+    private fun addParagraphField() {
+        val editText = createEditText("Enter paragraph", InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE)
+        editText.textSize = 16f // Normal text size for paragraphs
+        binding.linearLayoutContentContainer.addView(editText)
+        contentViews.add(editText)
+    }
+
+    private fun addHeadingField() {
+        val editText = createEditText("Enter heading", InputType.TYPE_CLASS_TEXT)
+        editText.textSize = 24f // Larger text size for headings
+        binding.linearLayoutContentContainer.addView(editText)
+        contentViews.add(editText)
+    }
+
+    private fun createEditText(hint: String, inputType: Int): EditText {
+        return EditText(this).apply {
+            this.hint = hint
+            this.inputType = inputType
+            this.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                setMargins(0, 16, 0, 16)
             }
-            false
-        }
-
-        // Button to create an article
-        binding.buttonCreateArticle.setOnClickListener {
-            createArticle()
         }
     }
 
     private fun createArticle() {
         val title = binding.editTextTitle.text.toString()
         val description = binding.editTextDescription.text.toString()
-        val content = binding.editTextContent.text.toString() // Menambahkan content
+        val contentList = mutableListOf<ContentItem>()
 
-        // Validate input fields
-        if (title.isBlank() || description.isBlank() || content.isBlank() || selectedImageUri == null) {
-            Toast.makeText(this, "Please fill all fields and select an image", Toast.LENGTH_SHORT).show()
+        for (view in contentViews) {
+            if (view is EditText) {
+                val text = view.text.toString()
+                if (text.isNotBlank()) {
+                    val contentType = if (view.textSize > 18f) "heading" else "paragraph"
+                    contentList.add(ContentItem(type = contentType, text = text))
+                }
+            }
+        }
+
+        if (title.isBlank() || description.isBlank() || contentList.isEmpty()) {
+            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Save the article
         lifecycleScope.launch {
             try {
-                // Create the article with title, description, content, and image URI
-                val result = articleRepository.createArticle(title, description, content, selectedImageUri!!)
+                val result = articleRepository.createArticle(title, description, contentList, selectedImageUri)
                 result.onSuccess {
                     Toast.makeText(this@CreateArticleActivity, "Article created successfully", Toast.LENGTH_SHORT).show()
                     finish()
-                }.onFailure { error ->
-                    Toast.makeText(this@CreateArticleActivity, "Error: ${error.message}", Toast.LENGTH_SHORT).show()
+                }.onFailure {
+                    Toast.makeText(this@CreateArticleActivity, "Error: ${it.message}", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 Toast.makeText(this@CreateArticleActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()

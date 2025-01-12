@@ -7,6 +7,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        create("release") {
+            storeFile = file("E:\\Dev\\Femlife\\femlife-key.jks")
+            storePassword = "14122004why"
+            keyAlias = "key0"
+            keyPassword = "qpwoeiruty"
+        }
+    }
     namespace = "com.example.femlife"
     compileSdk = 35
 
@@ -31,6 +39,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {

@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import com.example.femlife.config.ApiConfig
 import com.example.femlife.data.article.Article
+import com.example.femlife.data.article.ContentItem
 import io.github.jan.supabase.storage.storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -15,9 +16,14 @@ class ArticleRepository(private val context: Context) {
     private val firestore = ApiConfig.firestore
     private val supabase = ApiConfig.supabase
 
-    suspend fun createArticle(title: String, description: String, content: String, imageUri: Uri): Result<Article> = withContext(Dispatchers.IO) {
+    suspend fun createArticle(
+        title: String,
+        description: String,
+        content: List<ContentItem>,
+        imageUri: Uri?
+    ): Result<Article> = withContext(Dispatchers.IO) {
         try {
-            val imageUrl = uploadImageToSupabase(imageUri)
+            val imageUrl = imageUri?.let { uploadImageToSupabase(it) } ?: ""
             val article = Article(
                 title = title,
                 description = description,
@@ -26,9 +32,30 @@ class ArticleRepository(private val context: Context) {
                 createdAt = Date()
             )
             firestore.collection("articles").add(article).await()
+
+            // Tambahkan notifikasi untuk semua user
+            createNotificationForNewArticle(article)
+
             Result.success(article)
         } catch (e: Exception) {
             Result.failure(e)
+        }
+    }
+
+    // Fungsi baru untuk membuat notifikasi
+    private suspend fun createNotificationForNewArticle(article: Article) = withContext(Dispatchers.IO) {
+        try {
+            val notificationData = mapOf(
+                "title" to "Artikel Baru: ${article.title}",
+                "message" to "Baca artikel baru kami: ${article.description}",
+                "type" to "NEW_ARTICLE",
+                "timestamp" to Date(),
+                "userId" to "ALL_USERS" // Menandai notifikasi untuk semua user
+            )
+            firestore.collection("notifications").add(notificationData).await()
+        } catch (e: Exception) {
+            // Log error jika ada masalah saat membuat notifikasi
+            e.printStackTrace()
         }
     }
 
@@ -57,7 +84,6 @@ class ArticleRepository(private val context: Context) {
         }
     }
 
-    // ArticleRepository.kt
     suspend fun getArticleById(id: String): Result<Article> = withContext(Dispatchers.IO) {
         try {
             val document = firestore.collection("articles").document(id).get().await()
@@ -90,9 +116,9 @@ class ArticleRepository(private val context: Context) {
         }
     }
 
-    suspend fun updateArticleWithImage(article: Article, imageUri: Uri): Result<Unit> = withContext(Dispatchers.IO) {
+    suspend fun updateArticleWithImage(article: Article, imageUri: Uri?): Result<Unit> = withContext(Dispatchers.IO) {
         try {
-            val imageUrl = uploadImageToSupabase(imageUri)
+            val imageUrl = if (imageUri != null) uploadImageToSupabase(imageUri) else article.imageUrl
             val updatedArticle = article.copy(imageUrl = imageUrl)
             firestore.collection("articles").document(article.id).set(updatedArticle).await()
             Result.success(Unit)

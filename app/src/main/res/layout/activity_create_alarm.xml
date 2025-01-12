@@ -40,12 +40,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Tanggal Kontrol"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="16dp"
+                app:boxStrokeColor="@color/primary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:focusable="false"
                     android:drawableEnd="@drawable/ic_calendar" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -55,12 +57,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Waktu Kontrol"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="16dp"
+                app:boxStrokeColor="@color/primary" >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:focusable="false"
                     android:drawableEnd="@drawable/ic_time" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -70,10 +74,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Nama Dokter (Opsional)"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="16dp"
+                app:boxStrokeColor="@color/primary" >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_doctor_name"
+                    android:textColor="@color/black"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -83,10 +89,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Lokasi Kontrol"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="16dp"
+                app:boxStrokeColor="@color/primary" >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_location"
+                    android:textColor="@color/black"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -96,6 +104,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Catatan"
+                app:boxStrokeColor="@color/primary"
                 android:layout_marginTop="16dp">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -103,6 +112,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"
+                    android:textColor="@color/black"
                     android:lines="3" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -111,6 +121,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Pengaturan Notifikasi"
+                android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_marginTop="24dp" />
@@ -127,12 +138,15 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Pengingat sehari sebelum" />
+                    android:text="Pengingat sehari sebelum"
+                    android:textColor="@color/black" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/switch_one_day_before"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    app:thumbTint="@color/primaryAccent"
+                    app:trackTint="@color/switch_track_tint" />
             </LinearLayout>
 
             <!-- Switch: Pengingat Hari H -->
@@ -147,12 +161,15 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Pengingat hari H" />
+                    android:text="Pengingat hari H"
+                    android:textColor="@color/black" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/switch_day_of"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    app:thumbTint="@color/primaryAccent"
+                    app:trackTint="@color/switch_track_tint" />
             </LinearLayout>
 
             <!-- Switch: Notifikasi Suara -->
@@ -167,12 +184,15 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Notifikasi suara" />
+                    android:text="Notifikasi suara"
+                    android:textColor="@color/black" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/switch_sound"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    app:thumbTint="@color/primaryAccent"
+                    app:trackTint="@color/switch_track_tint" />
             </LinearLayout>
 
             <!-- Button Create di dalam ScrollView -->
@@ -181,6 +201,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Create Alarm"
+                android:backgroundTint="@color/primary"
                 android:textStyle="bold"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="16dp" />

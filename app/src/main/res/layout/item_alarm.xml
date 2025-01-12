@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:background="@color/white"
         android:padding="16dp">
 
         <!-- Tanggal & Waktu -->
@@ -20,6 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tanggal &amp; Waktu"
+            android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="16sp" />
 
@@ -29,6 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Dokter: Nama Dokter"
+            android:textColor="@color/black"
             android:textSize="14sp"
             android:layout_marginTop="4dp" />
 
@@ -38,6 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Lokasi: Lokasi Kontrol"
+            android:textColor="@color/black"
             android:textSize="14sp"
             android:layout_marginTop="4dp" />
 
@@ -47,6 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Catatan: Catatan Kontrol"
+            android:textColor="@color/black"
             android:textSize="14sp"
             android:layout_marginTop="4dp" />
 
