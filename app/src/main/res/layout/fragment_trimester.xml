@@ -10,6 +10,11 @@
         android:id="@+id/tabLayoutWeeks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:tabSelectedTextColor="@color/primary"
+        app:tabIndicatorColor="@color/primary"
+        app:tabRippleColor="@color/primary"
+        app:tabTextColor="@color/black"
+        app:tabBackground="@color/white"
         app:tabMode="fixed"
         app:tabGravity="fill" />
 

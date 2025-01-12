@@ -20,13 +20,14 @@ class ArticleManagerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityArticleManagerBinding
     private lateinit var articleAdapter: ArticleManagerAdapter
-    private lateinit var articleRepository: ArticleRepository
+    private lateinit var articleRepository: ArticleRepository // Declare ArticleRepository here
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityArticleManagerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Instantiate ArticleRepository manually
         articleRepository = ArticleRepository(this)
 
         setupToolbar()

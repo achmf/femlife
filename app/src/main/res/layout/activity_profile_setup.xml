@@ -34,12 +34,14 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:hint="Nama Lengkap">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:background="@color/white"
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -49,6 +51,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:background="@color/white"
         android:hint="Tanggal Lahir">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -56,6 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
+            android:textColor="@color/black"
             android:focusable="false"
             android:inputType="date" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -65,6 +69,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:background="@color/white"
         android:hint="Lokasi">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -72,6 +77,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
+            android:textColor="@color/black"
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -79,14 +85,16 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         android:layout_marginTop="16dp"
+        android:background="@color/white"
         android:hint="Nomor Telepon">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_phone_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:textColor="@color/black"
             android:inputType="phone" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -95,6 +103,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:background="@color/white"
         android:hint="Usia">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -103,6 +112,7 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:focusable="false"
+            android:textColor="@color/black"
             android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -112,6 +122,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Submit"
+        android:textColor="@color/white"
         android:backgroundTint="@color/primaryAccent"
         android:layout_marginTop="24dp" />
 </LinearLayout>

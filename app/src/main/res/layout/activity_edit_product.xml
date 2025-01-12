@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white_background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,6 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="Upload Image"
+                android:textColor="@color/white"
                 android:backgroundTint="@color/primaryAccent"
                 android:layout_marginBottom="16dp" />
 
@@ -47,6 +49,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Nama Produk"
+                android:textColorHint="@color/grayText"
+                android:textColor="@color/black"
                 android:inputType="text"
                 android:padding="8dp"
                 android:layout_marginTop="16dp"
@@ -57,6 +61,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Harga Produk"
+                android:textColorHint="@color/grayText"
+                android:textColor="@color/black"
                 android:inputType="numberDecimal"
                 android:padding="8dp"
                 android:layout_marginTop="16dp"
@@ -67,6 +73,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Nomor Admin (contoh 628123456)"
+                android:textColorHint="@color/grayText"
+                android:textColor="@color/black"
                 android:inputType="textUri"
                 android:padding="8dp"
                 android:layout_marginTop="16dp"
@@ -79,7 +87,7 @@
                 android:text="Update Produk"
                 android:layout_marginTop="24dp"
                 android:backgroundTint="@color/primaryAccent"
-                android:textColor="@android:color/white" />
+                android:textColor="@color/white" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

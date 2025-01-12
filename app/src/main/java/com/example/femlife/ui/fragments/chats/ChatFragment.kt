@@ -1,5 +1,7 @@
 package com.example.femlife.ui.fragments.chats
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -36,6 +38,7 @@ class ChatFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         observeChatGroups()
+        setupFloatingActionButton()
     }
 
     private fun setupRecyclerView() {
@@ -64,9 +67,22 @@ class ChatFragment : Fragment() {
         ChatDetailActivity.start(requireContext(), chatGroup.id)
     }
 
+    private fun setupFloatingActionButton() {
+        binding.fabWhatsapp.setOnClickListener {
+            openWhatsAppChat()
+        }
+    }
+
+    private fun openWhatsAppChat() {
+        val phoneNumber = "6287822168567 " // WhatsApp number
+        val url = "https://wa.me/$phoneNumber" // WhatsApp link format
+
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(intent)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
-

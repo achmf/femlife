@@ -16,10 +16,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.femlife.R
 import com.example.femlife.data.menstrual.CycleInfo
 import com.example.femlife.data.menstrual.SymptomType
+import com.example.femlife.utils.NotificationHelper
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.slider.Slider
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class MenstrualTrackerActivity : AppCompatActivity() {
 
@@ -28,11 +31,11 @@ class MenstrualTrackerActivity : AppCompatActivity() {
     private lateinit var tvNextPeriodInfo: TextView
     private lateinit var tvAverageCycleLength: TextView
     private lateinit var btnLogPeriod: MaterialButton
-    private lateinit var btnLogSymptoms: MaterialButton
     private lateinit var sliderCycleLength: Slider
     private lateinit var progressBarNextPeriod: ProgressBar
 
     private lateinit var viewModel: MenstrualTrackerViewModel
+    private lateinit var notificationHelper: NotificationHelper
 
     private val calendar = Calendar.getInstance()
     private val dateFormat = SimpleDateFormat("dd MMMM yyyy", Locale("id", "ID"))
@@ -43,6 +46,7 @@ class MenstrualTrackerActivity : AppCompatActivity() {
         setContentView(R.layout.activity_menstrual_tracker)
 
         viewModel = ViewModelProvider(this)[MenstrualTrackerViewModel::class.java]
+        notificationHelper = NotificationHelper(this)
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -53,7 +57,6 @@ class MenstrualTrackerActivity : AppCompatActivity() {
         tvNextPeriodInfo = findViewById(R.id.tvNextPeriodInfo)
         tvAverageCycleLength = findViewById(R.id.tvAverageCycleLength)
         btnLogPeriod = findViewById(R.id.btnLogPeriod)
-        btnLogSymptoms = findViewById(R.id.btnLogSymptoms)
         sliderCycleLength = findViewById(R.id.sliderCycleLength)
         progressBarNextPeriod = findViewById(R.id.progressBarNextPeriod)
 
@@ -90,10 +93,6 @@ class MenstrualTrackerActivity : AppCompatActivity() {
     private fun setupButtons() {
         btnLogPeriod.setOnClickListener {
             showCalendarPopup()
-        }
-
-        btnLogSymptoms.setOnClickListener {
-            showSymptomDialog()
         }
 
         sliderCycleLength.addOnChangeListener { _, value, fromUser ->
@@ -212,6 +211,14 @@ class MenstrualTrackerActivity : AppCompatActivity() {
                     daysUntilNextPeriod == 0 -> "Menstruasi diperkirakan dimulai hari ini"
                     else -> "Menstruasi diperkirakan sudah dimulai ${-daysUntilNextPeriod} hari yang lalu"
                 }
+
+                if (daysUntilNextPeriod <= 3) {
+                    notificationHelper.sendNotification(
+                        "Menstruasi Akan Dimulai",
+                        "Menstruasi anda diperkirakan dalam $daysUntilNextPeriod hari",
+                        NotificationHelper.NOTIFICATION_ID_NEXT_PERIOD
+                    )
+                }
             } else {
                 progressBarNextPeriod.progress = 0
                 tvNextPeriodInfo.text = "Belum cukup data untuk memprediksi menstruasi berikutnya"
@@ -221,4 +228,3 @@ class MenstrualTrackerActivity : AppCompatActivity() {
         tvAverageCycleLength.text = "Rata-rata panjang siklus: ${cycleInfo.cycleLength} hari"
     }
 }
-

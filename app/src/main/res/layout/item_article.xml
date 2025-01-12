@@ -10,7 +10,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/white">
 
         <ImageView
             android:id="@+id/imageViewThumbnail"
@@ -30,6 +31,7 @@
             android:layout_marginHorizontal="12dp"
             android:layout_marginTop="12dp"
             android:textSize="16sp"
+            android:textColor="@color/black"
             android:textStyle="bold"
             android:maxLines="2"
             android:ellipsize="end"
@@ -45,6 +47,7 @@
             android:layout_marginHorizontal="12dp"
             android:layout_marginTop="4dp"
             android:textSize="14sp"
+            android:textColor="@color/black"
             android:maxLines="2"
             android:ellipsize="end"
             app:layout_constraintTop_toBottomOf="@id/textViewTitle"
@@ -59,7 +62,7 @@
             android:layout_marginHorizontal="12dp"
             android:layout_marginTop="4dp"
             android:textSize="12sp"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="@color/grayText"
             app:layout_constraintTop_toBottomOf="@id/textViewDescription"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -71,6 +74,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="12dp"
             android:text="Lihat Sekarang"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/primary"
             android:textAllCaps="false"
             android:textSize="14sp"
             app:cornerRadius="8dp"

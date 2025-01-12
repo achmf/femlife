@@ -10,6 +10,6 @@ data class Article(
     val title: String = "",
     val description: String = "",
     val imageUrl: String = "",
-    val content: String = "",
+    val content: List<ContentItem> = emptyList(),
     val createdAt: Date = Date()
 ) : Parcelable

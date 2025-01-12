@@ -2,7 +2,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white_background">
 
     <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
@@ -37,13 +38,6 @@
             android:textStyle="bold" />
 
         <!-- Notification Icon -->
-        <ImageView
-            android:id="@+id/iv_notification_icon"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_gravity="end"
-            android:layout_marginEnd="8dp"
-            android:src="@drawable/ic_notification" />
     </androidx.appcompat.widget.Toolbar>
 
     <FrameLayout
@@ -63,6 +57,8 @@
         app:menu="@menu/bottom_nav_menu"
         app:itemIconSize="32dp"
         app:labelVisibilityMode="unlabeled"
+        app:itemRippleColor="@color/primary"
+        app:itemActiveIndicatorStyle="@style/Widget.MaterialComponents.BottomNavigationView"
         app:itemIconTint="@color/secondaryAccent"
         app:backgroundTint="@color/white" />
 

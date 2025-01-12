@@ -70,6 +70,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nama User"
+                    android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -78,6 +79,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="20 Tahun"
+                    android:textColor="@color/black"
                     android:textSize="16sp" />
 
                 <TextView
@@ -224,6 +226,6 @@
         android:text="Keluar"
         android:textSize="16sp"
         android:textColor="@color/white"
-        android:backgroundTint="?attr/colorError" />
+        android:backgroundTint="@color/red" />
 
 </LinearLayout>

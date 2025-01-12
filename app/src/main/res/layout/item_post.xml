@@ -34,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textStyle="bold"
+            android:textColor="@color/black"
             android:text="FemTalk User" />
 
         <ImageView
@@ -65,6 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:textAppearance="?attr/textAppearanceBody1"
+            android:textColor="@color/black"
             tools:text="This is a sample caption for the post." />
 
         <LinearLayout
@@ -78,6 +80,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Comment"
+                android:textColor="@color/black"
+                app:iconTint="@color/black"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 app:icon="@drawable/ic_comment" />
 

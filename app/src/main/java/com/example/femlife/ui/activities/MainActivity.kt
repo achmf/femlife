@@ -1,6 +1,5 @@
 package com.example.femlife.ui.activities
 
-import com.example.femlife.ui.activities.notification.NotificationActivity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
@@ -65,12 +64,6 @@ class MainActivity : AppCompatActivity() {
         // Navigasi ke ProfileActivity saat profile icon diklik
         binding.toolbar.findViewById<ImageView>(R.id.iv_profile_icon).setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
-            startActivity(intent)
-        }
-
-        // Navigasi ke com.example.femlife.ui.activities.notification.NotificationActivity saat notification icon diklik
-        binding.toolbar.findViewById<ImageView>(R.id.iv_notification_icon).setOnClickListener {
-            val intent = Intent(this, NotificationActivity::class.java)
             startActivity(intent)
         }
 

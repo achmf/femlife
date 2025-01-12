@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white_background"
     tools:context=".ui.fragments.femtalk.create.CreateTalkActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -14,8 +15,11 @@
             android:id="@+id/topAppBar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:backgroundTint="@color/primary"
             app:title="Create Post"
+            app:titleTextColor="@color/white"
             app:navigationIcon="@drawable/ic_arrow_back"
+            app:navigationIconTint="@color/white"
             app:menu="@menu/create_talk_menu"
             style="@style/Widget.MaterialComponents.Toolbar.Primary" />
 
@@ -44,6 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                app:boxStrokeColor="@color/primary"
                 android:hint="Write your caption...">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -51,6 +56,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"
+                    android:textColor="@color/black"
                     android:minLines="3" />
 
             </com.google.android.material.textfield.TextInputLayout>

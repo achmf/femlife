@@ -25,10 +25,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".ui.activities.notification.NotificationActivity"
-            android:exported="false" />
+        
         <activity
             android:name=".ui.activities.profile.edit.EditProfileActivity"
             android:exported="false" />

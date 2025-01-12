@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@android:color/white">
+    android:background="@color/white_background">
 
     <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
@@ -16,7 +16,7 @@
         app:navigationIcon="@drawable/ic_arrow_back"
         app:titleTextAppearance="@style/ToolbarTitleStyle" />
 
-    <!-- ScrollView to make content scrollable -->
+    <!-- Scrollable Content -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -25,15 +25,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical" >
 
             <!-- Image View -->
             <ImageView
                 android:id="@+id/imageViewArticle"
                 android:layout_width="match_parent"
+                android:layout_height="200dp"
                 android:layout_marginBottom="16dp"
                 android:scaleType="centerCrop"
-                android:layout_height="200dp"
+                android:contentDescription="Article image"
                 tools:src="@tools:sample/backgrounds/scenic" />
 
             <!-- Title Text -->
@@ -43,9 +44,10 @@
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/black"
+                android:textColor="@color/black"
                 android:layout_marginBottom="8dp"
-                android:layout_marginHorizontal="8dp"
+                android:layout_marginHorizontal="16dp"
+                android:contentDescription="Article Title"
                 tools:text="Article Title" />
 
             <!-- Created At Text -->
@@ -54,9 +56,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@color/grayText"
                 android:layout_marginBottom="8dp"
-                android:layout_marginHorizontal="8dp"
+                android:layout_marginHorizontal="16dp"
+                android:contentDescription="Article creation date"
                 tools:text="01 January 2023" />
 
             <!-- Description Text -->
@@ -67,20 +70,35 @@
                 android:textSize="16sp"
                 android:textColor="@color/black"
                 android:layout_marginBottom="16dp"
-                android:layout_marginHorizontal="8dp"
+                android:layout_marginHorizontal="16dp"
                 android:lineSpacingExtra="4dp"
+                android:contentDescription="Article description"
                 tools:text="Article description goes here..." />
 
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginVertical="16dp"
+                android:layout_marginHorizontal="16dp" />
+
             <!-- Content Text -->
-            <TextView
-                android:id="@+id/textViewContent"
+            <LinearLayout
+                android:id="@+id/linearLayoutContentContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:lineSpacingExtra="4dp"
-                android:layout_marginHorizontal="8dp"
-                tools:text="Article content goes here..." />
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_below="@id/textViewDescription"/>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                android:layout_marginVertical="16dp"
+                android:layout_marginHorizontal="16dp" />
 
         </LinearLayout>
     </ScrollView>

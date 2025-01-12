@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:backgroundTint="@color/secondary"
+        android:background="@color/white_background"
         android:gravity="center_horizontal">
 
         <!-- Header -->
@@ -35,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="54dp"
             android:clipToPadding="false"
             android:overScrollMode="never" />
     </LinearLayout>

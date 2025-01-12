@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Track color when switch is ON -->
+    <item android:color="@color/primary" android:state_checked="true" />
+    <!-- Default track color when switch is OFF -->
+    <item android:color="@color/gray" />
+</selector>
