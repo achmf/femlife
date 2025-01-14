@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.femlife.data.User
+import com.example.femlife.data.user.User
 import com.example.femlife.databinding.ActivityProfileSetupBinding
 import com.example.femlife.ui.activities.MainActivity
 import com.google.firebase.auth.FirebaseAuth

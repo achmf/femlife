@@ -173,12 +173,12 @@ class PostDetailActivity : AppCompatActivity() {
 
     private fun showDeleteCommentConfirmationDialog(comment: Comment) {
         AlertDialog.Builder(this)
-            .setTitle("Delete Comment")
-            .setMessage("Are you sure you want to delete this comment?")
-            .setPositiveButton("Delete") { _, _ ->
+            .setTitle("Hapus Komentar")
+            .setMessage("Anda yakin ingin menghapus komentar ini?")
+            .setPositiveButton("Hapus") { _, _ ->
                 viewModel.deleteComment(postId, comment.id)
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton("Batal", null)
             .show()
     }
 

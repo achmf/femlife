@@ -4,11 +4,11 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -49,7 +49,6 @@ class FemTalkFragment : Fragment() {
         setupRecyclerView()
         setupSwipeRefresh()
         setupFab()
-        setupToolbar()
         observeViewModel()
     }
 
@@ -76,37 +75,6 @@ class FemTalkFragment : Fragment() {
             val intent = Intent(requireContext(), CreateTalkActivity::class.java)
             createPostLauncher.launch(intent)
         }
-    }
-
-    private fun setupToolbar() {
-        binding.topAppBar.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.action_search -> {
-                    val searchView = menuItem.actionView as? SearchView
-                    if (searchView != null) {
-                        setupSearchView(searchView)
-                    } else {
-                        Toast.makeText(requireContext(), "Search view is not available.", Toast.LENGTH_SHORT).show()
-                    }
-                    true
-                }
-                else -> false
-            }
-        }
-    }
-
-    private fun setupSearchView(searchView: SearchView) {
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let { viewModel.searchPosts(it) }
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                newText?.let { viewModel.searchPosts(it) }
-                return true
-            }
-        })
     }
 
     private fun observeViewModel() {
@@ -166,12 +134,12 @@ class FemTalkFragment : Fragment() {
 
     private fun showDeleteConfirmationDialog(post: Post) {
         AlertDialog.Builder(requireContext())
-            .setTitle("Delete Post")
-            .setMessage("Are you sure you want to delete this post?")
-            .setPositiveButton("Delete") { _, _ ->
+            .setTitle("Hapus Postingan")
+            .setMessage("Anda yakin ingin menghapus postingan?")
+            .setPositiveButton("Hapus") { _, _ ->
                 deletePost(post)
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton("Batal", null)
             .show()
     }
 
@@ -195,4 +163,3 @@ class FemTalkFragment : Fragment() {
         }
     }
 }
-

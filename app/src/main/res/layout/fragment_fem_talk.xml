@@ -19,7 +19,6 @@
             android:backgroundTint="@color/white"
             app:titleTextColor="@color/black"
             app:title="FemTalk"
-            app:menu="@menu/fem_talk_menu"
             style="@style/Widget.MaterialComponents.Toolbar.Primary" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -48,6 +47,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:contentDescription="New Post"
+        android:backgroundTint="@color/primary"
         app:srcCompat="@drawable/ic_add" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

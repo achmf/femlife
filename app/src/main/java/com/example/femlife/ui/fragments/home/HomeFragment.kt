@@ -1,21 +1,27 @@
 package com.example.femlife.ui.fragments.home
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.femlife.data.menu.MenuItem
+import com.example.femlife.data.workshop.WorkshopItem
 import com.example.femlife.databinding.FragmentHomeBinding
-import com.example.femlife.ui.activities.article.ArticleActivity
-import com.example.femlife.ui.activities.product.ProductActivity
 import com.example.femlife.ui.activities.alarm.AlarmActivity
+import com.example.femlife.ui.activities.article.ArticleActivity
 import com.example.femlife.ui.activities.menstrual.MenstrualTrackerActivity
-import com.example.femlife.ui.activities.pregnancy.PregnancyActivity
 import com.example.femlife.ui.activities.postpregnancy.PostPregnancyActivity
+import com.example.femlife.ui.activities.pregnancy.PregnancyActivity
+import com.example.femlife.ui.activities.product.ProductActivity
+import com.example.femlife.ui.fragments.home.workshop.WorkshopAdapter
+import com.example.femlife.ui.fragments.home.workshop.create.CreateWorkshopActivity
+import com.example.femlife.ui.fragments.home.workshop.edit.EditWorkshopActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -24,7 +30,8 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val homeViewModel: HomeViewModel by viewModels()
-    private lateinit var adapter: HomeMenuAdapter
+    private lateinit var menuAdapter: HomeMenuAdapter
+    private lateinit var workshopAdapter: WorkshopAdapter
 
     private val firestore = FirebaseFirestore.getInstance()
     private val firebaseAuth = FirebaseAuth.getInstance()
@@ -35,39 +42,59 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        setupRecyclerView()
+        setupMenuRecyclerView()
+        setupWorkshopRecyclerView()
         observeViewModel()
-        fetchUserName() // Ambil nama user dari Firestore pertama kali
+        fetchUserName()
+
+        binding.fabHome.setOnClickListener {
+            // Contoh: Aksi saat FAB diklik (misalnya membuka ProfileActivity)
+            val intent = Intent(activity, CreateWorkshopActivity::class.java)
+            startActivity(intent)
+        }
 
         return binding.root
     }
 
-    // Memanggil ulang fungsi fetchUserName saat fragment kembali ke layar
     override fun onResume() {
         super.onResume()
-        fetchUserName() // Pastikan data nama user selalu up-to-date
+        fetchUserName()
+        homeViewModel.refreshWorkshopItems()  // Refresh workshop list to show newly added workshop
     }
 
-    private fun setupRecyclerView() {
-        adapter = HomeMenuAdapter(emptyList()) { menuItem ->
+    private fun setupMenuRecyclerView() {
+        menuAdapter = HomeMenuAdapter(emptyList()) { menuItem ->
             handleMenuClick(menuItem)
         }
 
         binding.recyclerViewMenu.layoutManager = GridLayoutManager(context, 3)
-        binding.recyclerViewMenu.adapter = adapter
+        binding.recyclerViewMenu.adapter = menuAdapter
+    }
+
+    private fun setupWorkshopRecyclerView() {
+        workshopAdapter = WorkshopAdapter(
+            emptyList(),
+            onItemClick = { workshopItem -> handleWorkshopClick(workshopItem) },
+            onItemLongClick = { workshopItem, action -> handleWorkshopLongClick(workshopItem, action) }
+        )
+
+        binding.recyclerViewWorkshop.layoutManager = GridLayoutManager(context, 2, GridLayoutManager.HORIZONTAL, false)
+        binding.recyclerViewWorkshop.adapter = workshopAdapter
     }
 
     private fun observeViewModel() {
         homeViewModel.menuItems.observe(viewLifecycleOwner) { menuItems ->
-            adapter.updateMenuItems(menuItems)
+            menuAdapter.updateMenuItems(menuItems)
+        }
+
+        homeViewModel.workshopItems.observe(viewLifecycleOwner) { workshopItems ->
+            workshopAdapter.updateWorkshopItems(workshopItems)
         }
     }
 
     private fun fetchUserName() {
-        // Mendapatkan userId dari Firebase Authentication
         val userId = firebaseAuth.currentUser?.uid
         if (userId != null) {
-            // Ambil nama user dari Firestore berdasarkan userId
             firestore.collection("users").document(userId).get()
                 .addOnSuccessListener { document ->
                     if (document != null && document.exists()) {
@@ -76,7 +103,6 @@ class HomeFragment : Fragment() {
                     }
                 }
                 .addOnFailureListener {
-                    // Tangani error jika gagal mengambil data
                     binding.tvWelcomeMessage.text = "Halo, \nUser"
                 }
         } else {
@@ -85,32 +111,56 @@ class HomeFragment : Fragment() {
     }
 
     private fun handleMenuClick(menuItem: MenuItem) {
-        when (menuItem.title) {
-            "Edukasi" -> {
-                val intent = Intent(activity, ArticleActivity::class.java)
+        val intent = when (menuItem.title) {
+            "Masa Kehamilan" -> Intent(activity, PregnancyActivity::class.java)
+            "Pasca Melahirkan" -> Intent(activity, PostPregnancyActivity::class.java)
+            "Produk" -> Intent(activity, ProductActivity::class.java)
+            "Siklus Menstruasi" -> Intent(activity, MenstrualTrackerActivity::class.java)
+            "Alarm Kontrol" -> Intent(activity, AlarmActivity::class.java)
+            "Edukasi" -> Intent(activity, ArticleActivity::class.java)
+            else -> null // For unknown menu items, no action
+        }
+        intent?.let {
+            startActivity(it)
+        } ?: Toast.makeText(context, "Menu item not found!", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun handleWorkshopClick(workshopItem: WorkshopItem) {
+        // Open the link of the workshop item in the browser
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(workshopItem.link))
+        startActivity(intent)
+    }
+
+    private fun handleWorkshopLongClick(workshopItem: WorkshopItem, action: String) {
+        when (action) {
+            "edit" -> {
+                // Navigate to EditWorkshopActivity to edit the workshop
+                val intent = Intent(activity, EditWorkshopActivity::class.java)
+                intent.putExtra("workshopItem", workshopItem) // Pass the selected workshop item
                 startActivity(intent)
             }
-            "Alarm Kontrol" -> {
-                val intent = Intent(activity, AlarmActivity::class.java)
-                startActivity(intent)
-            }
-            "Produk" -> {
-                val intent = Intent(activity, ProductActivity::class.java)
-                startActivity(intent)
-            }
-            "Masa Kehamilan" -> {
-                val intent = Intent(activity, PregnancyActivity::class.java)
-                startActivity(intent)
-            }
-            "Pasca Melahirkan" -> {
-                val intent = Intent(activity, PostPregnancyActivity::class.java)
-                startActivity(intent)
-            }
-            "Siklus Menstruasi" -> {
-                val intent = Intent(activity, MenstrualTrackerActivity::class.java)
-                startActivity(intent)
+            "delete" -> {
+                // Show a confirmation dialog for deleting
+                showDeleteConfirmationDialog(workshopItem)
             }
         }
+    }
+
+    private fun showDeleteConfirmationDialog(workshopItem: WorkshopItem) {
+        // You can use an AlertDialog to confirm the delete action
+        val dialog = android.app.AlertDialog.Builder(requireContext())
+            .setTitle("Hapus Workshop")
+            .setMessage("Anda yakin ingin menghapus workshop ini?")
+            .setPositiveButton("Ya") { _, _ ->
+                // Call delete function from ViewModel or Repository
+                homeViewModel.deleteWorkshop(workshopItem)
+                // Optionally show a toast or snackbar confirmation
+                Toast.makeText(context, "Workshop berhasil dihapus.", Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton("Tidak", null)
+            .create()
+
+        dialog.show()
     }
 
     override fun onDestroyView() {

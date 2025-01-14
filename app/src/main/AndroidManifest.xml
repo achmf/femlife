@@ -17,15 +17,21 @@
         android:theme="@style/Theme.Femlife"
         tools:targetApi="31">
         <activity
+            android:name=".ui.fragments.home.workshop.edit.EditWorkshopActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.fragments.home.workshop.create.CreateWorkshopActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.splashscreen.SplashActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
         <activity
             android:name=".ui.activities.profile.edit.EditProfileActivity"
             android:exported="false" />
@@ -101,13 +107,7 @@
             android:exported="true" />
         <activity
             android:name=".ui.activities.MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="true" />
     </application>
 
 </manifest>

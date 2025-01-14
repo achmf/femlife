@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="200dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:elevation="4dp"
+    android:background="@color/white"
+    android:radius="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <!-- Workshop Image -->
+        <ImageView
+            android:id="@+id/image_workshop"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:scaleType="centerCrop" />
+
+        <!-- Workshop Title -->
+        <TextView
+            android:id="@+id/text_workshop_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="16dp"
+            android:text="Workshop Title"
+            android:maxLines="2"
+            android:minLines="2"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/black" />
+
+        <!-- Workshop Description -->
+        <TextView
+            android:id="@+id/text_workshop_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginHorizontal="16dp"
+
+            android:text="Short description of the workshop."
+            android:textSize="14sp"
+            android:textColor="@color/grayText"
+            android:maxLines="2"
+            android:minLines="2"
+            android:ellipsize="end" />
+
+        <!-- Workshop Link -->
+        <TextView
+            android:id="@+id/text_workshop_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="Selengkapnya"
+            android:textSize="14sp"
+            android:textColor="@color/primaryAccent"
+            android:textStyle="bold" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

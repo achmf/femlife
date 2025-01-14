@@ -14,7 +14,7 @@
             android:id="@+id/topAppBar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:backgroundTint="@color/primary"
+            android:background="@color/primary"
             app:titleTextColor="@color/white"
             app:navigationIconTint="@color/white"
             app:title="Edit Post"
