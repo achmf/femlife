@@ -42,26 +42,37 @@
                 android:visibility="gone" />
 
             <!-- Upload Image Button -->
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonUploadImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Upload Image"
+                android:text="Upload Gambar"
+                app:icon="@drawable/ic_upload"
+                app:iconGravity="textStart"
+                app:cornerRadius="8dp"
+                app:backgroundTint="@color/primary"
+                app:strokeWidth="2dp"
+                app:strokeColor="@color/primary"
                 android:textColor="@color/white"
-                android:backgroundTint="@color/primary" />
+                android:paddingHorizontal="32dp"
+                android:paddingVertical="12dp" />
 
             <!-- Title -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Title">
+                app:boxStrokeColor="@color/primary"
+                app:hintAnimationEnabled="true">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextTitle"
                     android:textColor="@color/black"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:hint="Judul"
+                    android:textColorHint="@color/gray"
+                    android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Description -->
@@ -69,12 +80,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Description">
+                app:boxStrokeColor="@color/primary"
+                app:hintAnimationEnabled="true">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextDescription"
                     android:textColor="@color/black"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:hint="Deskripsi"
+                    android:textColorHint="@color/gray"
+                    android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Buttons for Content -->
@@ -84,23 +99,32 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="16dp">
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/buttonAddParagraph"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Paragraph"
+                    android:text="Paragraf"
+                    app:cornerRadius="8dp"
+                    app:backgroundTint="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:strokeColor="@color/primary"
                     android:textColor="@color/white"
-                    android:backgroundTint="@color/primary" />
+                    android:paddingHorizontal="32dp"
+                    android:paddingVertical="12dp" />
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/buttonAddHeading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Heading"
+                    android:text="Header"
+                    app:cornerRadius="8dp"
+                    app:backgroundTint="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:strokeColor="@color/primary"
                     android:textColor="@color/white"
-                    android:backgroundTint="@color/primary" />
-
+                    android:paddingHorizontal="32dp"
+                    android:paddingVertical="12dp" />
             </LinearLayout>
 
             <!-- Dynamic Content Container -->
@@ -112,14 +136,19 @@
                 android:layout_marginTop="16dp" />
 
             <!-- Create Article Button -->
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonCreateArticle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Create Article"
+                android:text="Buat Artikel"
+                app:cornerRadius="8dp"
+                app:backgroundTint="@color/primary"
+                app:strokeWidth="2dp"
+                app:strokeColor="@color/primary"
                 android:textColor="@color/white"
-                android:backgroundTint="@color/primary" />
+                android:paddingHorizontal="32dp"
+                android:paddingVertical="12dp" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

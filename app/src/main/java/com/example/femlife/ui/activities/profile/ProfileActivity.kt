@@ -17,7 +17,6 @@ import com.example.femlife.databinding.ActivityProfileBinding
 import com.example.femlife.ui.activities.auth.LoginActivity
 import com.example.femlife.ui.activities.profile.avatar.AvatarAdapter
 import com.example.femlife.ui.activities.profile.edit.EditProfileActivity
-import com.google.android.material.chip.Chip
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.firebase.auth.FirebaseAuth
 

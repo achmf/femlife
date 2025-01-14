@@ -168,12 +168,17 @@
             </LinearLayout>
 
             <!-- Buttons -->
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogPeriod"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="Tambah Produk"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
                 android:layout_marginHorizontal="16dp"
-                android:text="Catat Menstruasi" />
+                app:cornerRadius="8dp"
+                app:backgroundTint="@color/primary"
+                android:textColor="@android:color/white" />
 
         </LinearLayout>
 

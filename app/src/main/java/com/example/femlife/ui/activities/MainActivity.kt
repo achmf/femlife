@@ -38,14 +38,17 @@ class MainActivity : AppCompatActivity() {
             .addOnSuccessListener { document ->
                 if (document.exists()) {
                     val profileCompleted = document.getBoolean("profileCompleted") ?: false
-                    val avatarResourceId = document.getLong("avatar")?.toInt() ?: R.drawable.default_avatar
+                    val avatarResourceId =
+                        document.getLong("avatar")?.toInt() ?: R.drawable.default_avatar
+                    document.getString("role") ?: "user" // Ambil role user
 
                     if (profileCompleted) {
                         binding = ActivityMainBinding.inflate(layoutInflater)
                         setContentView(binding.root)
 
                         // Set the avatar from Firestore
-                        binding.toolbar.findViewById<ImageView>(R.id.iv_profile_icon).setImageResource(avatarResourceId)
+                        binding.toolbar.findViewById<ImageView>(R.id.iv_profile_icon)
+                            .setImageResource(avatarResourceId)
 
                         setupUI(savedInstanceState)
                     } else {
@@ -70,10 +73,19 @@ class MainActivity : AppCompatActivity() {
         // Bottom Navigation Listener
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_home -> loadFragment(HomeFragment())
-                R.id.nav_femtalk -> loadFragment(FemTalkFragment())
-                R.id.nav_anonchat -> loadFragment(ChatFragment())
-                else -> false
+                R.id.nav_home -> {
+                    loadFragment(HomeFragment())
+                    true  // Ensure it returns a Boolean value
+                }
+                R.id.nav_femtalk -> {
+                    loadFragment(FemTalkFragment())
+                    true  // Ensure it returns a Boolean value
+                }
+                R.id.nav_anonchat -> {
+                    loadFragment(ChatFragment())
+                    true  // Ensure it returns a Boolean value
+                }
+                else -> false  // Returning false if no fragment matches
             }
         }
 
@@ -100,9 +112,13 @@ class MainActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
-                    val avatarResourceId = document.getLong("avatar")?.toInt() ?: R.drawable.default_avatar
+                    val avatarResourceId =
+                        document.getLong("avatar")?.toInt() ?: R.drawable.default_avatar
                     val profileIcon = binding.toolbar.findViewById<ImageView>(R.id.iv_profile_icon)
                     profileIcon.setImageResource(avatarResourceId)
+
+                    // Ambil role user dan sesuaikan visibilitas FAB
+                    document.getString("role") ?: "user"
                 } else {
                     navigateToLoginActivity()
                 }
