@@ -1,3 +1,4 @@
+// HomeFragment.kt
 package com.example.femlife.ui.fragments.home
 
 import android.content.Intent
@@ -45,10 +46,10 @@ class HomeFragment : Fragment() {
         setupMenuRecyclerView()
         setupWorkshopRecyclerView()
         observeViewModel()
-        fetchUserName()
+        fetchUserRole()
 
         binding.fabHome.setOnClickListener {
-            // Contoh: Aksi saat FAB diklik (misalnya membuka ProfileActivity)
+            // Contoh: Aksi saat FAB diklik (misalnya membuka CreateWorkshopActivity)
             val intent = Intent(activity, CreateWorkshopActivity::class.java)
             startActivity(intent)
         }
@@ -59,6 +60,7 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         fetchUserName()
+        fetchUserRole()
         homeViewModel.refreshWorkshopItems()  // Refresh workshop list to show newly added workshop
     }
 
@@ -107,6 +109,35 @@ class HomeFragment : Fragment() {
                 }
         } else {
             binding.tvWelcomeMessage.text = "Halo, User"
+        }
+    }
+
+    private fun fetchUserRole() {
+        val userId = firebaseAuth.currentUser?.uid
+        if (userId != null) {
+            firestore.collection("users").document(userId).get()
+                .addOnSuccessListener { document ->
+                    if (document != null && document.exists()) {
+                        val userRole = document.getString("role") ?: "user"
+                        if (userRole == "admin") {
+                            // Tampilkan FAB jika pengguna adalah admin
+                            binding.fabHome.visibility = View.VISIBLE
+                        } else {
+                            // Sembunyikan FAB jika pengguna adalah user
+                            binding.fabHome.visibility = View.GONE
+                        }
+                    } else {
+                        // Default: Sembunyikan FAB jika data pengguna tidak ditemukan
+                        binding.fabHome.visibility = View.GONE
+                    }
+                }
+                .addOnFailureListener {
+                    // Jika ada error, sembunyikan FAB
+                    binding.fabHome.visibility = View.GONE
+                }
+        } else {
+            // Jika pengguna tidak login, sembunyikan FAB
+            binding.fabHome.visibility = View.GONE
         }
     }
 
